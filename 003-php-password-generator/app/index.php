@@ -6,6 +6,7 @@ $useAlphaMaj = $_POST["use-alpha-maj"] ?? 0;
 $useNum = $_POST["use-num"] ?? 0;
 $useSymbols = $_POST["use-symbols"] ?? 0;
 
+
 // Keep the checkbox checked if selected by the user.
 function isChecked($nameCheckbox) : string {
     $checked = "";
@@ -49,6 +50,7 @@ function takeRandom(string $subject): string {
     return $randomChar;
 }
 
+$generated = "";
 // default status of checkbox
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $generated = generatePassword($size, $useAlphaMin, $useAlphaMaj, $useNum, $useSymbols);
@@ -57,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $useAlphaMaj = 1;
     $useNum = 1;
     $useSymbols = 1;
+
+    $generated = generatePassword($size, $useAlphaMin, $useAlphaMaj, $useNum, $useSymbols);
 }
 
 // generation of password
@@ -114,7 +118,7 @@ function generatePassword(
     $limitBoucle = $size - ($useAlphaMin + $useAlphaMaj + $useNum + $useSymbols);
 
     // complete the password
-    for($i = 1; $i < $limitBoucle; $i++) {
+    for($i = 0; $i < $limitBoucle; $i++) {
         // need to creat an array with number for index -> rand
         $values = array_values($sequences);
         $randomSequence = $values[rand(0, count($values) - 1)];
@@ -134,40 +138,137 @@ $page = <<< HTML
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Générateur de mots de passe</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: "Inter", Arial, sans-serif;
+            }
+            
+            body {
+                background: #f5f7fa;
+                padding: 40px;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .container {
+                width: 100%;
+                max-width: 620px;
+            }
+            
+            h1 {
+                text-align: center;
+                font-size: 2em;
+                margin-bottom: 25px;
+                color: #222;
+                font-weight: 700;
+            }
+            
+            .section-title {
+                font-weight: 600;
+                font-size: 1em;
+                margin-bottom: 6px;
+                display: block;
+            }
+            
+            form {
+                background: #fff;
+                padding: 30px 40px;
+                border-radius: 14px;
+                box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+            }
+            
+            .password-box {
+                padding: 15px;
+                background: #f0f3f7;
+                border: 2px solid #d1d6dd;
+                border-radius: 10px;
+                margin-bottom: 25px;
+                font-family: "Courier New", monospace;
+                font-size: 1.15em;
+                word-break: break-all;
+                user-select: all;
+            }
+            
+            select {
+                width: 100%;
+                padding: 10px;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+            
+            .checkbox-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 12px;
+            }
+            
+            input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                accent-color: #4c8bff;
+            }
+            
+            button {
+                width: 100%;
+                padding: 14px;
+                background: linear-gradient(135deg,#4c8bff,#2a6eed);
+                border: none;
+                color: #fff;
+                font-size: 1.1em;
+                font-weight: 600;
+                border-radius: 10px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+            
+            button:hover {
+                background: linear-gradient(135deg,#2a6eed,#4c8bff);
+            }
+        </style>
     </head>
     <body>
-        <h1>Générateur de mots de passe</h1>
-        <form method="POST" action="/">
-            <div>
-            <p>Mot de passe :</p>
-            <p>$generated</p>
-            </div>
-            <div>
-                <label for="size" class="form-label">Taille</label>
-                <select id="size" class="form-select" aria-label="Default select example" name="size">
-                    $optionsGenerated
-                </select>
-            </div>
-            <div class="">
-                <input class="" type="checkbox" value="1" id="use-alpha-min" name="use-alpha-min" $isUseAlphaMinChecked>
-                <label class="" for="use-alpha-min">Utiliser les lettres minuscules (a-z)</label>
-            </div>
-            <div class="">
-                <input class="" type="checkbox" value="1" id="use-alpha-maj" name="use-alpha-maj" $isUseAlphaMajChecked>
-                <label class="" for="use-alpha-maj">Utiliser les lettres majuscules (A-Z)</label>
-            </div>
-            <div class="">
-                <input class="" type="checkbox" value="1" id="use-num" name="use-num"  $isUseNumChecked>
-                <label class="" for="use-num">Utiliser les chiffres (0-9)</label>
-            </div>
-            <div class="">
-                <input class="" type="checkbox" value="1" id="use-symbols" name="use-symbols" $isUseSymbolsChecked>
-                <label class="" for="use-symbols">Utiliser les symboles (!@#$%^&*())</label>
-            </div>
-            <div class="">
-                <button type="submit" class="">Générer !</button>
-            </div>
-        </form>
+        <div class="container">
+            <h1>Générateur de mots de passe</h1>
+            <form method="POST" action="/">
+                <div>
+                <label class="section-title">Mot de passe :</label>
+                <div class="password-box">
+                    $generated
+                </div>
+                </div>
+                <div>
+                    <label for="size" class="form-label">Taille</label>
+                    <select id="size" class="form-select" aria-label="Default select example" name="size">
+                        $optionsGenerated
+                    </select>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" value="1" id="use-alpha-min" name="use-alpha-min" $isUseAlphaMinChecked>
+                    <label for="use-alpha-min">Utiliser les lettres minuscules (a-z)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" value="1" id="use-alpha-maj" name="use-alpha-maj" $isUseAlphaMajChecked>
+                    <label for="use-alpha-maj">Utiliser les lettres majuscules (A-Z)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" value="1" id="use-num" name="use-num" $isUseNumChecked>
+                    <label for="use-num">Utiliser les chiffres (0-9)</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" value="1" id="use-symbols" name="use-symbols" $isUseSymbolsChecked>
+                    <label for="use-symbols">Utiliser les symboles (!@#$%^&*())</label>
+                </div>
+                <div>
+                    <button type="submit" class="">Générer !</button>
+                </div>
+            </form>
+        </div>
     </body>
 </html>
 HTML;
