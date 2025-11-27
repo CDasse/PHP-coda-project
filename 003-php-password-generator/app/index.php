@@ -77,7 +77,7 @@ function generatePassword(
     $useAlphaMaj == 0 &&
     $useNum == 0 &&
     $useSymbols == 0) {
-        return "Erreur : choisissez au moins un type de caractères.";
+        return "Choisissez au moins un type de caractères.";
     }
     $password = "";
 
