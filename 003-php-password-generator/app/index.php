@@ -67,6 +67,14 @@ function generatePassword(
     bool $useNum,
     bool $useSymbols
 ): string {
+
+    // manage error if none of the checkbox are selected
+    if ($useAlphaMin == 0 &&
+    $useAlphaMaj == 0 &&
+    $useNum == 0 &&
+    $useSymbols == 0) {
+        return "Erreur : choisissez au moins un type de caractères.";
+    }
     $password = "";
 
     $sequences = [];
