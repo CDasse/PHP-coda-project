@@ -1,10 +1,12 @@
 <?php
-$selected = $_POST["size"] ?? 12;
+// get choices from the user
+$size = $_POST["size"] ?? 12;
 $useAlphaMin = $_POST["use-alpha-min"] ?? 0;
 $useAlphaMaj = $_POST["use-alpha-maj"] ?? 0;
 $useNum = $_POST["use-num"] ?? 0;
 $useSymbols = $_POST["use-symbols"] ?? 0;
 
+// Keep the checkbox checked if selected by the user.
 function isChecked($nameCheckbox) : string {
     $checked = "";
     if ($nameCheckbox === "1") {
@@ -13,20 +15,21 @@ function isChecked($nameCheckbox) : string {
     return $checked;
 }
 
+// verify the status of checkbox
 $isUseAlphaMinChecked = isChecked($useAlphaMin);
 $isUseAlphaMajChecked = isChecked($useAlphaMaj);
 $isUseNumChecked = isChecked($useNum);
 $isUseSymbolsChecked = isChecked($useSymbols);
 
-
-function generateSelectOptions(int $selected = 12): string {
+//create options for size in html
+function generateSelectOptions(int $size = 12): string {
     $html = "";
 
     $options = range(8, 42);
 
     foreach ($options as $value) {
         $attribute = "";
-        if ((int) $value == (int) $selected) {
+        if ((int) $value == (int) $size) {
             $attribute = "selected";
         }
 
@@ -35,8 +38,9 @@ function generateSelectOptions(int $selected = 12): string {
     return $html;
 }
 
-$optionsGenerated = generateSelectOptions($selected);
+$optionsGenerated = generateSelectOptions($size);
 
+// take a random char in a string
 function takeRandom(string $subject): string {
     $index = random_int(0, strlen($subject) - 1);
 
@@ -45,8 +49,9 @@ function takeRandom(string $subject): string {
     return $randomChar;
 }
 
+// default status of checkbox
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $generated = generatePassword($selected, $useAlphaMin, $useAlphaMaj, $useNum, $useSymbols);
+    $generated = generatePassword($size, $useAlphaMin, $useAlphaMaj, $useNum, $useSymbols);
 } else {
     $useAlphaMin = 1;
     $useAlphaMaj = 1;
@@ -54,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $useSymbols = 1;
 }
 
+// generation of password
 function generatePassword(
     int $size,
     bool $useAlphaMin,
@@ -65,51 +71,53 @@ function generatePassword(
 
     $sequences = [];
 
-    if ($useAlphaMin == 1) {
-        $sequences[] = "abcdefghijklmnopqrstuvwxz";
+    if ($useAlphaMaj == 1) {
+        $sequences["maj"] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     }
 
-    if ($useAlphaMaj == 1) {
-        $sequences[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if ($useAlphaMin == 1) {
+        $sequences["min"] = "abcdefghijklmnopqrstuvwxyz";
     }
 
     if ($useNum == 1) {
-        $sequences[] = "0123456789";
+        $sequences["num"] = "0123456789";
     }
 
     if ($useSymbols == 1) {
-        $sequences[] = "!@#$%^&*";
+        $sequences["symbols"] = "!@#$%^&*";
     }
 
+
+    // add at least one char of every checkbox checked
+    if ($useAlphaMaj == 1) {
+        $password .= takeRandom($sequences["maj"]);
+    }
+    if ($useAlphaMin == 1) {
+        $password .= takeRandom($sequences["min"]);
+    }
+    if ($useNum == 1) {
+        $password .= takeRandom($sequences["num"]);
+    }
+    if ($useSymbols == 1) {
+        $password .= takeRandom($sequences["symbols"]);
+    }
+
+    // calculate size of password without first char initialized
     $limitBoucle = $size - ($useAlphaMin + $useAlphaMaj + $useNum + $useSymbols);
 
-    if ($useAlphaMaj == 1) {
-        $password .= takeRandom($sequences[0]);
-    }
-
-    if ($useAlphaMin == 1) {
-        $password .= takeRandom($sequences[1]);
-    }
-
-    if ($useNum == 1) {
-        $password .= takeRandom($sequences[2]);
-    }
-
-    if ($useSymbols == 1) {
-        $password .= takeRandom($sequences[3]);
-    }
-
+    // complete the password
     for($i = 1; $i < $limitBoucle; $i++) {
-        $sequenceAleatoire = $sequences[rand(0,sizeof($sequences) - 1)];
-        $password .= takeRandom($sequenceAleatoire);
+        // need to creat an array with number for index -> rand
+        $values = array_values($sequences);
+        $randomSequence = $values[rand(0, count($values) - 1)];
+        $password .= takeRandom($randomSequence);
     }
 
+    // shuffle the password
     $password = str_shuffle($password);
 
     return $password;
 }
-
-$gereratedPassword = generatePassword($selected, $useAlphaMin, $useAlphaMaj, $useNum, $useSymbols);
 
 $page = <<< HTML
 <!doctype html>
@@ -124,7 +132,7 @@ $page = <<< HTML
         <form method="POST" action="/">
             <div>
             <p>Mot de passe :</p>
-            <p>$gereratedPassword</p>
+            <p>$generated</p>
             </div>
             <div>
                 <label for="size" class="form-label">Taille</label>
