@@ -56,45 +56,99 @@ $html =<<< HTML
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Jeu Pierre, Feuilles, Ciseaux</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Courier New", monospace;
+        }
+        
         body {
-        background-color: #24273a;
-        color: #cad3f5;
-        font-family: "Bahnschrift"
+            background-color: #0a0a0a;
+            color: #66ff66;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            min-height: 100vh;
         }
         
         h1 {
-        text-align: center;
-        text-decoration: underline;
-
+            font-size: 2.5em;
+            color: #66ff66;
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #66ff66;
+            padding-bottom: 10px;
         }
         
         div {
-        display: flex;
-        justify-content: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 35px;
         }
         
         section {
-        text-align: center;
-        margin: 30px;
-        line-height: 25px;
+            background-color: #101010;
+            border: 2px solid #33cc33;
+            padding: 20px 25px;
+            border-radius: 10px;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .stat {
+        margin: 20px;
         }
         
         span {
-        font-weight: bold;
-        color: #c6a0f6;
+            display: block;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 8px;
         }
         
         a {
-        text-decoration: none;
-        border: 1px solid;
-        border-radius: 3px;
-        padding: 10px;
-        color: #cad3f5;
+            text-decoration: none;
+            margin: 6px;
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 2px solid #33cc33;
+            color: #33cc33;
+            font-weight: bold;
+            font-size: 1em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
         }
         
         a:hover {
-        color: #24273a;
-        background-color: #cad3f5;
+            background-color: #33cc33;
+            color: #0a0a0a;
+        }
+        
+        .cta {
+        margin: 20px;
+        max-width: 700px;
+        }
+        
+        section:nth-of-type(4) p {
+            font-size: 1em;
+            color: #66ff66;
+            margin: 6px 0;
+        }
+        
+        @media (max-width: 600px) {
+            div {
+                flex-direction: column;
+                gap: 20px;
+            }
+        
+            section {
+                min-width: 100%;
+            }
         }
     </style>
     </head>
@@ -114,14 +168,14 @@ $html =<<< HTML
             <p>Résultat : <br>
             <span>$result</span> </p>
         </section>
-        <section>
-            <p>Statistiques :</p>
-            <p> - Nombre de parties : </p>
-            <p> - Nombre de victoires :</p>
-            <p> - Nombre de défaites :</p>
-            <p> - Nombre d'égalités :</p>
-        </section>
-        <section>
+<!--        <section class="stat">-->
+<!--            <p>Statistiques :</p>-->
+<!--            <p> - Nombre de parties : </p>-->
+<!--            <p> - Nombre de victoires :</p>-->
+<!--            <p> - Nombre de défaites :</p>-->
+<!--            <p> - Nombre d'égalités :</p>-->
+<!--        </section>-->
+        <section class="cta">
         <a href="?player=Pierre">Pierre</a>
         <a href="?player=Feuille">Feuille</a>
         <a href="?player=Ciseaux">Ciseaux</a>
