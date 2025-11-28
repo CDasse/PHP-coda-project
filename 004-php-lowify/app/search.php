@@ -47,6 +47,11 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
 
 $artistsFoundAsHTML = "";
 
+if (sizeof($artistsFound) == 0) {
+    $artistsFoundAsHTML .= <<<HTML
+        <p>Aucun artiste ne correspond à votre recherche.</p>
+    HTML;
+} else {
 foreach ($artistsFound as $artist) {
     $artistId = $artist['id'];
     $artistName = $artist['name'];
@@ -59,7 +64,8 @@ foreach ($artistsFound as $artist) {
             <p>$artistName</p>
         </a>
         </div>
-HTML;
+        HTML;
+}
 }
 
 $albumsFound = [];
@@ -87,15 +93,20 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
 
 $albumsFoundAsHTML = "";
 
-foreach ($albumsFound as $album) {
-    $albumId = $album['album_id'];
-    $albumName = $album['album_name'];
-    $albumCover = $album['album_cover'];
-    $albumReleaseDate = $album['album_release_date'];
-    $artistName = $album['artist_name'];
-    $artistId = $album['artist_id'];
-
+if (sizeof($albumsFound) == 0) {
     $albumsFoundAsHTML .= <<<HTML
+        <p>Aucun album ne correspond à votre recherche.</p>
+    HTML;
+} else {
+    foreach ($albumsFound as $album) {
+        $albumId = $album['album_id'];
+        $albumName = $album['album_name'];
+        $albumCover = $album['album_cover'];
+        $albumReleaseDate = $album['album_release_date'];
+        $artistName = $album['artist_name'];
+        $artistId = $album['artist_id'];
+
+        $albumsFoundAsHTML .= <<<HTML
         <div>
         <a href="album.php?id=$albumId">
             <img src="$albumCover" alt="Photo de l'album">
@@ -103,6 +114,7 @@ foreach ($albumsFound as $album) {
         </a>
         </div>
 HTML;
+    }
 }
 
 $songsFound = [];
@@ -138,18 +150,23 @@ function timeInMMSS(int $number): string{
     return $minutes . ':' . $secondes;
 }
 
-foreach ($songsFound as $song) {
-    $songName = $song['song_name'];
-    $songDuration = $song['song_duration'];
-    $songNote = $song['song_note'];
-    $albumName = $song['album_name'];
-    $albumId = $song['album_id'];
-    $artistName = $song['artist_name'];
-    $artistId = $song['artist_id'];
-
-    $songDurationInMMSS = timeInMMSS($songDuration);
-
+if (sizeof($songsFound) == 0) {
     $songsFoundAsHTML .= <<<HTML
+        <p>Aucune chanson ne correspond à votre recherche.</p>
+    HTML;
+} else {
+    foreach ($songsFound as $song) {
+        $songName = $song['song_name'];
+        $songDuration = $song['song_duration'];
+        $songNote = $song['song_note'];
+        $albumName = $song['album_name'];
+        $albumId = $song['album_id'];
+        $artistName = $song['artist_name'];
+        $artistId = $song['artist_id'];
+
+        $songDurationInMMSS = timeInMMSS($songDuration);
+
+        $songsFoundAsHTML .= <<<HTML
         <div>
             <p>$songName</p>
             <p>$songDurationInMMSS</p>
@@ -158,11 +175,12 @@ foreach ($songsFound as $song) {
             <p><a href="artist.php?id=$artistId">$artistName</a></p>
         </div>
 HTML;
+    }
 }
 
 $html = <<< HTML
 <a href="index.php">Retour à l'accueil</a>
-<h1>Recherche</h1>
+<h1>Recherche : $search</h1>
 <h2>Artistes</h2>
 $artistsFoundAsHTML
 <h2>Albums</h2>

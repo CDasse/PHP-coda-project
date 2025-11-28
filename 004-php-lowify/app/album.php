@@ -41,7 +41,7 @@ try {
     SQL, ["idAlbum" => $idAlbum]);
 
     // redirection to error page if idArtist doesn't exist
-    if ($albumInfos == null) {
+    if (sizeof($albumInfos) == 0) {
         header("Location: $error");
         exit;
     }
