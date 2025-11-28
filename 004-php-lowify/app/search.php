@@ -3,6 +3,7 @@
 // files included
 require_once 'inc/page.inc.php';
 require_once 'inc/database.inc.php';
+require_once 'inc/utils.inc.php';
 
 // initialize data base manager
 $host = "mysql";
@@ -31,9 +32,9 @@ $artistsFound = [];
 try {
     $artistsFound = $db->executeQuery(<<<SQL
     SELECT
-            name,
-            id,
-            cover
+        name,
+        id,
+        cover
     FROM artist
     WHERE (
         MATCH(name) AGAINST(:search IN NATURAL LANGUAGE MODE) OR
@@ -143,12 +144,6 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
 }
 
 $songsFoundAsHTML = "";
-
-function timeInMMSS(int $number): string{
-    $minutes = floor($number / 60);
-    $secondes = $number % 60;
-    return $minutes . ':' . $secondes;
-}
 
 if (sizeof($songsFound) == 0) {
     $songsFoundAsHTML .= <<<HTML

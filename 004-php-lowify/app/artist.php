@@ -3,6 +3,7 @@
 // files included
 require_once 'inc/page.inc.php';
 require_once 'inc/database.inc.php';
+require_once 'inc/utils.inc.php';
 
 // initialize data base manager
 $host = "mysql";
@@ -59,15 +60,7 @@ $artistCover = $artistInfosInArray['cover'];
 $artistBio = $artistInfosInArray['biography'];
 $artistMonthlyListeners = $artistInfosInArray['monthly_listeners'];
 
-function numberWithLetter(int $number): string{
-    if ($number >= 1000000) {
-        return round(($number / 1000000),1) . 'M';
-    } else if ($number >= 1000) {
-        return round(($number / 1000),1) . 'k';
-    } else {
-        return (string)$number;
-}
-}
+
 
 $artistMonthlyListenersInLetter = numberWithLetter($artistMonthlyListeners);
 

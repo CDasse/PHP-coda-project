@@ -2,6 +2,7 @@
 // files included
 require_once 'inc/page.inc.php';
 require_once 'inc/database.inc.php';
+require_once 'inc/utils.inc.php';
 
 // initialize data base manager
 $host = "mysql";
@@ -60,19 +61,13 @@ $albumReleaseDate = $albumInfosInArray['album_release_date'];
 $artistId = $albumInfosInArray['artist_id'];
 $artistName = $albumInfosInArray['artist_name'];
 
-function dateInDMY (string $date) : string {
-    $dateObj = new DateTime($date);
-    $dateInDMY = $dateObj->format('d-m-Y');
-    return $dateInDMY;
-}
-
 $albumReleaseDateInDMY = dateInDMY($albumReleaseDate);
 
 $albumInfoAsHTML = <<<HTML
     <div>
         <img src="$albumCover" alt="Photo de l'album">
         <div>
-            <p>$artistName</p>
+            <p><a href="artist.php?id=$artistId" $artistName</p>
             <p>$albumReleaseDateInDMY</p>
         </div>
     </div>
@@ -97,12 +92,6 @@ try {
 }
 
 $artistAlbumsAsHTML = "";
-
-function timeInMMSS(int $number): string{
-    $minutes = floor($number / 60);
-    $secondes = $number % 60;
-    return $minutes . ':' . $secondes;
-}
 
 foreach ($songsOfAlbum as $song) {
     $songName = $song['song_name'];
