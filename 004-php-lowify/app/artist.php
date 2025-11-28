@@ -35,12 +35,17 @@ try {
     WHERE id = :idArtist
     SQL, ["idArtist" => $idArtist]);
 
+    // redirection to error page if idArtist doesn't exist
     if ($artistInfos == null) {
-        
+        $error = "error.php?message=Artiste inconnu";
+        header('Location: '.$error);
+        exit;
     }
 
 } catch (PDOException $ex) {
     echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    $error = "error.php?message=Artiste inconnu";
+    header('Location: '.$error);
     exit;
 }
 
@@ -146,10 +151,16 @@ SQL, ["idArtist" => $idArtist]);
 
 $artistAlbumsAsHTML = "";
 
+//function dateInDMY (string $date) : string {
+//    return date_format($date, 'd-m-Y');
+//}
+
 foreach ($artistAlbums as $album) {
     $albumName = $album['album_name'];
     $albumCover = $album['album_cover'];
     $albumReleaseDate = $album['album_release_date'];
+
+//    $albumReleaseDateInDMY = dateInDMY($albumReleaseDate);
 
     $artistAlbumsAsHTML .= <<<HTML
         <div>
