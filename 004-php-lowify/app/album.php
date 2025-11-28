@@ -1,18 +1,33 @@
 <?php
+
 // files included
 require_once 'inc/page.inc.php';
 require_once 'inc/database.inc.php';
 require_once 'inc/utils.inc.php';
 
-// initialize data base manager
 $host = "mysql";
 $dbname = "lowify";
 $username = "lowify";
 $password = "lowifypassword";
 
 $db = null;
+$idAlbum = $_GET["id"];
+$error = "error.php?message=Album inconnu";
+
+$albumInfos = [];
+$albumInfoAsHTML = "";
+$songsOfAlbum = [];
+$songsOfAlbumAsHTML = "";
+
+/**
+ * Initialize the data base
+ *
+ * @param string $host name of the host
+ * @param string $dbname name of the data base
+ * @param string $username name of the user
+ * @param string $password password of the data base
+ **/
 try {
-    // check if the connexion is ok
     $db = new DatabaseManager(
         dsn: "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
         username: $username,
@@ -23,11 +38,12 @@ try {
     exit;
 }
 
-$idAlbum = $_GET["id"];
-$error = "error.php?message=Album inconnu";
-
-$albumInfos = [];
-
+/**
+ * Query album information with the corresponding artist
+ *
+ * This query retrieves the album name, its cover, release date,
+ * and the artist associated.
+ **/
 try {
     $albumInfos = $db->executeQuery(<<<SQL
     SELECT 
@@ -41,7 +57,7 @@ try {
     WHERE album.id = :idAlbum
     SQL, ["idAlbum" => $idAlbum]);
 
-    // redirection to error page if idArtist doesn't exist
+    // redirection to error page if album doesn't exist
     if (sizeof($albumInfos) == 0) {
         header("Location: $error");
         exit;
@@ -53,28 +69,36 @@ try {
     exit;
 }
 
+// converting the result into a simple array
 $albumInfosInArray = $albumInfos[0];
 
+// storing album information in variables
 $albumName = $albumInfosInArray['album_name'];
 $albumCover = $albumInfosInArray['album_cover'];
 $albumReleaseDate = $albumInfosInArray['album_release_date'];
 $artistId = $albumInfosInArray['artist_id'];
 $artistName = $albumInfosInArray['artist_name'];
 
+// formatting release date as DD/MM/YYYY
 $albumReleaseDateInDMY = dateInDMY($albumReleaseDate);
 
+// generating the HTML block containing album information
 $albumInfoAsHTML = <<<HTML
     <div>
         <img src="$albumCover" alt="Photo de l'album">
         <div>
-            <p><a href="artist.php?id=$artistId" $artistName</p>
+            <p><a href="artist.php?id=$artistId">$artistName</a></p>
             <p>$albumReleaseDateInDMY</p>
         </div>
     </div>
 HTML;
 
-$songsOfAlbum = [];
-
+/**
+ * Query all the songs of the current album
+ *
+ * This query returns each song name, duration, and note,
+ * ordered by song id in ascending order.
+ **/
 try {
     $songsOfAlbum = $db->executeQuery(<<<SQL
     SELECT 
@@ -91,16 +115,16 @@ try {
     exit;
 }
 
-$artistAlbumsAsHTML = "";
-
+// generating HTML for each song of the album
 foreach ($songsOfAlbum as $song) {
     $songName = $song['song_name'];
     $songDuration = $song['song_duration'];
     $songNote = $song['song_note'];
 
+    // convert duration into MM:SS format
     $songDurationInMMSS = timeInMMSS($songDuration);
 
-    $artistAlbumsAsHTML .= <<<HTML
+    $songsOfAlbumAsHTML .= <<<HTML
         <div>
             <p>$songName</p>
             <p>$songDurationInMMSS</p>
@@ -109,14 +133,16 @@ foreach ($songsOfAlbum as $song) {
 HTML;
 }
 
+// final HTML structure of the page
 $html = <<< HTML
 <h1>$albumName</h1>
 <div>
 $albumInfoAsHTML
-$artistAlbumsAsHTML
+$songsOfAlbumAsHTML
 </div>
 HTML;
 
+// displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - $albumName"))
     ->addContent($html)
     ->render();
