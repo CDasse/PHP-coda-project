@@ -43,7 +43,6 @@ try {
     }
 
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
     $error = "error.php?message=Artiste inconnu";
     header('Location: '.$error);
     exit;
@@ -63,9 +62,9 @@ $artistMonthlyListeners = $artistInfosInArray['monthly_listeners'];
 
 function numberWithLetter(int $number): string{
     if ($number >= 1000000) {
-        return round(($number / 1000000),2) . 'M';
+        return round(($number / 1000000),1) . 'M';
     } else if ($number >= 1000) {
-        return round(($number / 1000),2) . 'K';
+        return round(($number / 1000),1) . 'k';
     } else {
         return (string)$number;
 }
@@ -77,7 +76,6 @@ $artistInfoAsHTML = <<<HTML
     <div>
         <img src="$artistCover" alt="Photo de l'artiste">
         <div>
-            <h5>$artistName</h5>
             <p>$artistBio</p>
             <p>$artistMonthlyListenersInLetter</p>
         </div>
@@ -108,7 +106,7 @@ $artistTop5SongsAsHTML = "";
 
 function timeInMMSS(int $number): string{
     $minutes = floor($number / 60);
-    $secondes = round(($number % 60), 2);
+    $secondes = $number % 60;
     return $minutes . ':' . $secondes;
 }
 
@@ -137,6 +135,7 @@ $artistAlbums = [];
 try {
     $artistAlbums = $db->executeQuery(<<<SQL
     SELECT
+        album.id AS album_id,
         album.name AS album_name,
         album.cover AS album_cover,
         album.release_date AS album_release_date
@@ -151,30 +150,35 @@ SQL, ["idArtist" => $idArtist]);
 
 $artistAlbumsAsHTML = "";
 
-//function dateInDMY (string $date) : string {
-//    return date_format($date, 'd-m-Y');
-//}
+function dateInDMY (string $date) : string {
+    $dateObj = new DateTime($date);
+    $dateInDMY = $dateObj->format('d-m-Y');
+    return $dateInDMY;
+}
 
 foreach ($artistAlbums as $album) {
+    $albumId = $album['album_id'];
     $albumName = $album['album_name'];
     $albumCover = $album['album_cover'];
     $albumReleaseDate = $album['album_release_date'];
 
-//    $albumReleaseDateInDMY = dateInDMY($albumReleaseDate);
+    $albumReleaseDateInDMY = dateInDMY($albumReleaseDate);
 
     $artistAlbumsAsHTML .= <<<HTML
         <div>
+        <a href="album.php?id=$albumId">
             <img src="$albumCover" alt="Photo de l'artiste">
             <div>
                 <h5>$albumName</h5>
-                <p>$albumReleaseDate</p>
+                <p>$albumReleaseDateInDMY</p>
             </div>
+        </a>
         </div>
 HTML;
 }
 
 $html = <<< HTML
-<h1></h1>
+<h1>$artistName</h1>
 <div>
     $artistInfoAsHTML
     $artistTop5SongsAsHTML
