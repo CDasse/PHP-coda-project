@@ -11,6 +11,18 @@ $username = "lowify";
 $password = "lowifypassword";
 
 $db = null;
+
+$allArtists = [];
+$artistesAsHTML = "";
+
+/**
+ * Initialize the data base
+ *
+ * @param string $host name of the host
+ * @param string $dbname name of the data base
+ * @param string $username name of the user
+ * @param string $password password of the data base
+ **/
 try {
     // check if the connexion is ok
     $db = new DatabaseManager(
@@ -23,27 +35,25 @@ try {
     exit;
 }
 
-// table of artists
-$allArtists = [];
-
-// extract artists data from data base
+/**
+ * Query artists information
+ *
+ * This query retrieves all artist name, cover, and id
+ **/
 try {
     $allArtists = $db->executeQuery(<<<SQL
     SELECT
         id,
         name,
         cover
-    FROM lowify.artist
+    FROM artist
 SQL);
 } catch (PDOException $ex) {
     echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
     exit;
 }
 
-
-$artistesAsHTML = "";
-
-//edit HTML structure form each artist
+// generating HTML for each artist
 foreach ($allArtists as $artist) {
     $artistId = $artist['id'];
     $artistName = $artist['name'];
@@ -63,6 +73,7 @@ foreach ($allArtists as $artist) {
 HTML;
 }
 
+// final HTML structure of the page
 $html = <<< HTML
 <h1>Lowify - Artistes</h1>
 <div>
@@ -70,6 +81,7 @@ $html = <<< HTML
 </div>
 HTML;
 
+// displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - Artistes"))
     ->addContent($html)
     ->render();

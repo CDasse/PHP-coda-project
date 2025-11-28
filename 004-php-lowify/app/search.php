@@ -5,13 +5,31 @@ require_once 'inc/page.inc.php';
 require_once 'inc/database.inc.php';
 require_once 'inc/utils.inc.php';
 
-// initialize data base manager
 $host = "mysql";
 $dbname = "lowify";
 $username = "lowify";
 $password = "lowifypassword";
 
 $db = null;
+
+$search = $_POST["search"];
+$searchLike = "%". $search . "%";
+
+$artistsFound = [];
+$artistsFoundAsHTML = "";
+$albumsFound = [];
+$albumsFoundAsHTML = "";
+$songsFound = [];
+$songsFoundAsHTML = "";
+
+/**
+ * Initialize the data base
+ *
+ * @param string $host name of the host
+ * @param string $dbname name of the data base
+ * @param string $username name of the user
+ * @param string $password password of the data base
+ **/
 try {
     // check if the connexion is ok
     $db = new DatabaseManager(
@@ -24,11 +42,12 @@ try {
     exit;
 }
 
-$search = $_POST["search"];
-$searchLike = "%". $search . "%";
-
-$artistsFound = [];
-
+/**
+ * Query artists corresponding to the search
+ *
+ * This query retrieves the artist name, its cover
+ * if he is corresponding to the search.
+ **/
 try {
     $artistsFound = $db->executeQuery(<<<SQL
     SELECT
@@ -46,8 +65,8 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
     exit;
 }
 
-$artistsFoundAsHTML = "";
-
+// Return message if no artist founded
+// or generating HTML for each artist
 if (sizeof($artistsFound) == 0) {
     $artistsFoundAsHTML .= <<<HTML
         <p>Aucun artiste ne correspond à votre recherche.</p>
@@ -69,8 +88,13 @@ foreach ($artistsFound as $artist) {
 }
 }
 
-$albumsFound = [];
-
+/**
+ * Query albums corresponding to the search
+ *
+ * This query retrieves the album name, its cover, the release date,
+ * the name of its artist,
+ * if it is corresponding to the search.
+ **/
 try {
     $albumsFound = $db->executeQuery(<<<SQL
     SELECT 
@@ -92,8 +116,8 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
     exit;
 }
 
-$albumsFoundAsHTML = "";
-
+// Return message if no album founded
+// or generating HTML for each album
 if (sizeof($albumsFound) == 0) {
     $albumsFoundAsHTML .= <<<HTML
         <p>Aucun album ne correspond à votre recherche.</p>
@@ -118,8 +142,13 @@ HTML;
     }
 }
 
-$songsFound = [];
-
+/**
+ * Query songs corresponding to the search
+ *
+ * This query retrieves the song name, duration, note, its album name,
+ * its artist name,
+ * if it is corresponding to the search.
+ **/
 try {
     $songsFound = $db->executeQuery(<<<SQL
     SELECT 
@@ -143,8 +172,8 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
     exit;
 }
 
-$songsFoundAsHTML = "";
-
+// Return message if no song founded
+// or generating HTML for each song
 if (sizeof($songsFound) == 0) {
     $songsFoundAsHTML .= <<<HTML
         <p>Aucune chanson ne correspond à votre recherche.</p>
@@ -173,6 +202,7 @@ HTML;
     }
 }
 
+// final HTML structure of the page
 $html = <<< HTML
 <a href="index.php">Retour à l'accueil</a>
 <h1>Recherche : $search</h1>
@@ -184,6 +214,7 @@ $albumsFoundAsHTML
 $songsFoundAsHTML
 HTML;
 
+// displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - Recherche"))
     ->addContent($html)
     ->render();
