@@ -265,7 +265,7 @@ $page = <<< HTML
                     <label for="use-symbols">Utiliser les symboles (!@#$%^&*())</label>
                 </div>
                 <div>
-                    <button type="submit" class="">Générer !</button>
+                    <button type="submit">Générer !</button>
                 </div>
             </form>
         </div>
