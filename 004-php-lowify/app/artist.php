@@ -24,6 +24,7 @@ try {
 }
 
 $idArtist = $_GET["id"];
+$error = "error.php?message=Artiste inconnu";
 
 $artistInfos = [];
 
@@ -37,14 +38,12 @@ try {
 
     // redirection to error page if idArtist doesn't exist
     if ($artistInfos == null) {
-        $error = "error.php?message=Artiste inconnu";
-        header('Location: '.$error);
+        header("Location: $error");
         exit;
     }
 
 } catch (PDOException $ex) {
-    $error = "error.php?message=Artiste inconnu";
-    header('Location: '.$error);
+    header("Location: $error");
     exit;
 }
 

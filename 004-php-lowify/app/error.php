@@ -9,10 +9,10 @@ $html = <<< HTML
 <h1>$message</h1>
     <div>
     <p>L'artiste demandé n'a malheureusement pas été trouvé.</p>
-    <a href="artists.php">Retour à l'accueil</a>
+    <a href="index.php">Retour à l'accueil</a>
 </div>
 HTML;
 
-echo (new HTMLPage(title: "Lowify - Artiste inconnu"))
+echo (new HTMLPage(title: "Lowify - $message"))
     ->addContent($html)
     ->render();

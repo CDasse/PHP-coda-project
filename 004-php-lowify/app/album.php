@@ -23,6 +23,7 @@ try {
 }
 
 $idAlbum = $_GET["id"];
+$error = "error.php?message=Album inconnu";
 
 $albumInfos = [];
 
@@ -41,14 +42,13 @@ try {
 
     // redirection to error page if idArtist doesn't exist
     if ($albumInfos == null) {
-        $error = "error.php?message=Album inconnu";
-        header('Location: '.$error);
+        header("Location: $error");
         exit;
     }
 
 } catch (PDOException $ex) {
     $error = "error.php?message=Album inconnu";
-    header('Location: '.$error);
+    header("Location: $error");
     exit;
 }
 
