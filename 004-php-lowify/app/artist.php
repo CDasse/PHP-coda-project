@@ -112,7 +112,8 @@ try {
         song.duration AS song_duration,
         song.note AS song_note,
         album.cover AS album_cover,
-        album.id AS album_id
+        album.id AS album_id,
+        album.name AS album_name
     FROM song
     INNER JOIN album ON album.id = song.album_id
     WHERE song.artist_id = :idArtist
@@ -132,6 +133,7 @@ foreach ($artistTop5Songs as $song) {
     $songNote = $song['song_note'];
     $albumCover = $song['album_cover'];
     $albumId = $song['album_id'];
+    $albumName = $song['album_name'];
 
     // convert duration into MM:SS format
     $songDurationInMMSS = timeInMMSS($songDuration);
@@ -139,7 +141,7 @@ foreach ($artistTop5Songs as $song) {
     $artistTop5SongsAsHTML .= <<<HTML
         <div class="track-item">
             <div class="track-info">
-                <a href="album.php?id=$albumId" class="track-link">
+                <a href="album.php?id=$albumId"  title="$albumName - Détails de l'album" class="track-link">
                     <img src="$albumCover" alt="Pochette de l'album" class="track-album-cover">
                     <span class="track-name">$songName</span>
                 </a>
@@ -187,7 +189,7 @@ foreach ($artistAlbums as $album) {
     // generating the HTML block containing album information
     $artistAlbumsAsHTML .= <<<HTML
         <div class="card-item album">
-            <a href="album.php?id=$albumId">
+            <a href="album.php?id=$albumId" title="$albumName - Détails de l'album">
                 <img src="$albumCover" alt="Pochette de l'album: $albumName">
                 <h5>$albumName</h5>
                 <p>$albumReleaseDateInDMY</p>
@@ -199,7 +201,7 @@ foreach ($artistAlbums as $album) {
 // final HTML structure of the page
 $html = <<< HTML
 <div class="page-container">
-    <a href="index.php" class="back-link">← Retour à l'accueil</a>
+    <a href="index.php" class="back-link" title="Retour à l'accueil">← Retour à l'accueil</a>
     $artistInfoAsHTML
     <div class="content-section">
         <h2>Morceaux Populaires</h2>
@@ -219,5 +221,7 @@ HTML;
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - $artistName"))
     ->addContent($html)
+    ->addHead('<meta charset="utf-8">')
+    ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">')
     ->addStylesheet("inc/style.css")
     ->render();

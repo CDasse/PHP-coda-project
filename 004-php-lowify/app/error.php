@@ -12,7 +12,7 @@ $html = <<< HTML
     
     <div class="error-details">
         <p>Votre requête ou recherche n'a pas pu aboutir ou la ressource demandée n'existe pas.</p>
-        <a href="index.php" class="button primary-button large-button">Retour à l'accueil</a>
+        <a href="index.php" class="button primary-button large-button" title="Retour à l'accueil">Retour à l'accueil</a>
     </div>
 </div>
 HTML;
@@ -20,5 +20,7 @@ HTML;
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - $message"))
     ->addContent($html)
+    ->addHead('<meta charset="utf-8">')
+    ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">')
     ->addStylesheet("inc/style.css")
     ->render();

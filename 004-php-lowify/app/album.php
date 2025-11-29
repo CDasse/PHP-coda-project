@@ -90,7 +90,7 @@ $albumInfoAsHTML = <<<HTML
             <p class="album-type">Album</p>
             <h1 class="album-name-title">$albumName</h1>
             <p class="album-meta">
-                Par <a href="artist.php?id=$artistId" class="artist-link-small">$artistName</a>
+                Par <a href="artist.php?id=$artistId" title="$artistName - Détails de l'artiste" class="artist-link-small">$artistName</a>
                 <span class="meta-separator"> • </span>
                 $albumReleaseDateInDMY
             </p>
@@ -148,7 +148,7 @@ foreach ($songsOfAlbum as $song) {
 // final HTML structure of the page
 $html = <<< HTML
 <div class="page-container">
-    <a href="index.php" class="back-link">← Retour à l'accueil</a>
+    <a href="index.php" class="back-link" title="Retour à l'accueil">← Retour à l'accueil</a>
     $albumInfoAsHTML
     <div class="content-section">
         <h2>Pistes de l'album</h2>
@@ -167,5 +167,7 @@ HTML;
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - $albumName"))
     ->addContent($html)
+    ->addHead('<meta charset="utf-8">')
+    ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">')
     ->addStylesheet("inc/style.css")
     ->render();

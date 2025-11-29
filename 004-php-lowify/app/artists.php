@@ -61,7 +61,7 @@ foreach ($allArtists as $artist) {
 
     $artistesAsHTML .= <<<HTML
         <div class="card-item artist">
-            <a href="artist.php?id=$artistId">
+            <a href="artist.php?id=$artistId" title="$artistName - Détails de l'artiste">
                 <img src="$artistCover" alt="Photo de l'artiste: $artistName">
                 <h5>$artistName</h5>
             </a>
@@ -72,7 +72,7 @@ foreach ($allArtists as $artist) {
 // final HTML structure of the page
 $html = <<< HTML
 <div class="page-container">
-<a href="index.php" class="back-link">← Retour à l'accueil</a>
+<a href="index.php" class="back-link" title="Retour à l'accueil">← Retour à l'accueil</a>
     <h1>Lowify - Artistes</h1>
     
     <div class="content-section">
@@ -85,5 +85,7 @@ HTML;
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - Artistes"))
     ->addContent($html)
+    ->addHead('<meta charset="utf-8">')
+    ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">')
     ->addStylesheet("inc/style.css")
     ->render();

@@ -16,6 +16,10 @@ $top5RecentAlbums = [];
 $top5RecentAlbumsAsHTML = "";
 $top5NotationAlbums = [];
 $top5NotationAlbumsAsHTML = "";
+$allAlbumsForSearch = [];
+$allArtistsForSearch = [];
+$allSongsForSearch = [];
+$allNamesForSearchAsHTML = "";
 
 /**
  * Initialize the data base
@@ -67,7 +71,7 @@ foreach ($top5Artists as $artist) {
 
     $top5ArtistsAsHTML .= <<<HTML
         <div class="card-item artist">
-            <a href="artist.php?id=$artistId">
+            <a href="artist.php?id=$artistId" title="$artistName - Détails de l'artiste">
                 <img src="$artistCover" alt="Photo de l'artiste: $artistName">
                 <h5>$artistName</h5>
             </a>
@@ -110,10 +114,10 @@ foreach ($top5RecentAlbums as $album) {
 
     $top5RecentAlbumsAsHTML .= <<<HTML
         <div class="card-item album">
-            <a href="album.php?id=$albumId">
+            <a href="album.php?id=$albumId" title="$albumName - Détails de l'album">
                 <img src="$albumCover" alt="Pochette de l'album: $albumName">
                 <h5>$albumName</h5>
-                <p><a href="artist.php?id=$artistId">$artistName</a></p>
+                <p><a href="artist.php?id=$artistId"  title="$artistName - Détails de l'artiste">$artistName</a></p>
             </a>
         </div>
     HTML;
@@ -157,12 +161,77 @@ foreach ($top5NotationAlbums as $album) {
 
     $top5NotationAlbumsAsHTML .= <<<HTML
         <div class="card-item album">
-            <a href="album.php?id=$albumId">
+            <a href="album.php?id=$albumId"  title="$albumName - Détails de l'album">
                 <img src="$albumCover" alt="Pochette de l'album: $albumName">
                 <h5>$albumName</h5>
-                <p><a href="artist.php?id=$artistId">$artistName</a></p>
+                <p><a href="artist.php?id=$artistId" title="$artistName - Détails de l'artiste">$artistName</a></p>
             </a>
         </div>
+    HTML;
+}
+
+/**
+ * Querys every artist, album, song to auto-complete search
+ *
+ * This query retrieves albums name, artists name, and songs name
+ **/
+try {
+    $allArtistsForSearch = $db->executeQuery(<<<SQL
+    SELECT
+        name AS artist_name
+    FROM artist
+SQL);
+} catch (PDOException $ex) {
+    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    exit;
+}
+
+// generating HTML for each album of the top 5 notation
+foreach ($allArtistsForSearch as $artist) {
+    $artistName = $artist['artist_name'];
+
+    $allNamesForSearchAsHTML .= <<<HTML
+        <option value="$artistName">
+    HTML;
+}
+
+try {
+    $allAlbumsForSearch = $db->executeQuery(<<<SQL
+    SELECT
+        name AS album_name
+    FROM album
+SQL);
+} catch (PDOException $ex) {
+    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    exit;
+}
+
+// generating HTML for each album of the top 5 notation
+foreach ($allAlbumsForSearch as $album) {
+    $albumName = $album['album_name'];
+
+    $allNamesForSearchAsHTML .= <<<HTML
+        <option value="$albumName">
+    HTML;
+}
+
+try {
+    $allSongsForSearch = $db->executeQuery(<<<SQL
+    SELECT
+        name AS song_name
+    FROM song
+SQL);
+} catch (PDOException $ex) {
+    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    exit;
+}
+
+// generating HTML for each album of the top 5 notation
+foreach ($allSongsForSearch as $song) {
+    $songName = $song['song_name'];
+
+    $allNamesForSearchAsHTML .= <<<HTML
+        <option value="$songName">
     HTML;
 }
 
@@ -170,10 +239,13 @@ foreach ($top5NotationAlbums as $album) {
 $html = <<< HTML
 <div class="page-container">
     <h1>Lowify</h1>
-    
+
     <div class="search-section">
         <form action="search.php" method="POST" class="search-form">
-            <input type="search" id="site-search" name="search" placeholder="Artistes, chansons ou albums..." />
+            <input type="search" id="site-search" name="search" list="suggestions" placeholder="Artistes, chansons ou albums..." />
+            <datalist id="suggestions">
+            $allNamesForSearchAsHTML
+            </datalist>
             <button type="submit">Rechercher</button>
         </form>
     </div>
@@ -184,7 +256,7 @@ $html = <<< HTML
             $top5ArtistsAsHTML
         </div>
         <p class="view-all-link">
-                <a href="artists.php" class="button primary-button">Voir tous les artistes</a>
+            <a href="artists.php" class="button primary-button" title="Voir tous les artistes">Voir tous les artistes</a>
         </p>
     </div>
     
@@ -207,5 +279,7 @@ HTML;
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify"))
     ->addContent($html)
+    ->addHead('<meta charset="utf-8">')
+    ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">')
     ->addStylesheet("inc/style.css")
     ->render();

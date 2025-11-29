@@ -79,7 +79,7 @@ foreach ($artistsFound as $artist) {
 
     $artistsFoundAsHTML .= <<<HTML
             <div class="card-item artist">
-                <a href="artist.php?id=$artistId">
+                <a href="artist.php?id=$artistId" title="$artistName - Détails de l'artiste">
                     <img src="$artistCover" alt="Photo de l'artiste: $artistName">
                     <h5>$artistName</h5>
                 </a>
@@ -135,10 +135,10 @@ if (sizeof($albumsFound) == 0) {
 
         $albumsFoundAsHTML .= <<<HTML
         <div class="card-item album">
-            <a href="album.php?id=$albumId">
+            <a href="album.php?id=$albumId" title="$albumName - Détails de l'album">
                 <img src="$albumCover" alt="Pochette de l'album: $albumName">
                 <h5>$albumName</h5>
-                <p><a href="artist.php?id=$artistId">$artistName</a></p>
+                <p><a href="artist.php?id=$artistId" title="$artistName - Détails de l'artiste">$artistName</a></p>
                 <p>$albumReleaseDateInDMY</p>
             </a>
         </div>
@@ -204,9 +204,9 @@ if (sizeof($songsFound) == 0) {
                 <div class="track-text-info">
                     <span class="track-name">$songName</span>
                     <span class="track-artist">
-                        <a href="artist.php?id=$artistId">$artistName</a>
+                        <a href="artist.php?id=$artistId" title="$artistName - Détails de l'artiste">$artistName</a>
                         <span class="meta-separator"> • </span>
-                        <a href="album.php?id=$albumId">$albumName</a>
+                        <a href="album.php?id=$albumId" title="$albumName - Détails de l'album">$albumName</a>
                     </span>
                 </div>
             </div>
@@ -225,7 +225,7 @@ if (sizeof($songsFound) == 0) {
 // final HTML structure of the page
 $html = <<< HTML
 <div class="page-container">
-    <a href="index.php" class="back-link">← Retour à l'accueil</a>
+    <a href="index.php" class="back-link" title="Retour à l'accueil">← Retour à l'accueil</a>
     
     <h1 class="search-title">Résultats pour : "$search"</h1>
 
@@ -253,5 +253,7 @@ HTML;
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - Recherche"))
     ->addContent($html)
+    ->addHead('<meta charset="utf-8">')
+    ->addHead('<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">')
     ->addStylesheet("inc/style.css")
     ->render();
