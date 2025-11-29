@@ -131,12 +131,15 @@ if (sizeof($albumsFound) == 0) {
         $artistName = $album['artist_name'];
         $artistId = $album['artist_id'];
 
+        $albumReleaseDateInDMY = dateInDMY($albumReleaseDate);
+
         $albumsFoundAsHTML .= <<<HTML
         <div class="card-item album">
             <a href="album.php?id=$albumId">
                 <img src="$albumCover" alt="Pochette de l'album: $albumName">
                 <h5>$albumName</h5>
                 <p><a href="artist.php?id=$artistId">$artistName</a></p>
+                <p>$albumReleaseDateInDMY</p>
             </a>
         </div>
         HTML;
