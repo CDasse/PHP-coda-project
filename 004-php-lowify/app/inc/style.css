@@ -1,0 +1,492 @@
+:root {
+    --color-background-dark: #121212;
+    --color-background-card: #181818;
+    --color-text-white: #FFFFFF;
+    --color-text-light: #B3B3B3;
+    --color-primary: #1DB954;
+    --border-radius: 8px;
+    --padding-card: 16px;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--color-background-dark);
+    color: var(--color-text-white);
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2, h3, h5 {
+    color: var(--color-text-white);
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 4em;
+}
+
+a {
+    color: var(--color-text-white);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--color-primary);
+}
+
+.page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.search-form input[type="search"] {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border-radius: 50px;
+    border: none;
+    background-color: var(--color-background-card);
+    color: var(--color-text-white);
+}
+
+.search-form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background-color: var(--color-primary);
+    color: var(--color-background-dark);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-form button:hover {
+    background-color: #1ed760;
+}
+
+.content-section {
+    margin-bottom: 40px;
+}
+
+.card-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.card-item {
+    flex: 0 0 200px;
+    background-color: var(--color-background-card);
+    padding: var(--padding-card);
+    border-radius: var(--border-radius);
+    transition: background-color 0.2s;
+}
+
+.card-item:hover {
+    background-color: #282828;
+}
+
+.card-item a {
+    display: block;
+    text-align: center;
+}
+
+.card-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.card-item.album img {
+    border-radius: var(--border-radius);
+}
+
+.card-item h5 {
+    font-size: 16px;
+    margin-top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-item p {
+    color: var(--color-text-light);
+    font-size: 14px;
+    margin: 0;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+.primary-button {
+    background-color: var(--color-primary);
+    color: var(--color-background-dark);
+}
+
+.primary-button:hover {
+    background-color: #1ed760;
+    color: var(--color-background-dark);
+}
+
+.view-all-link {
+    margin-top: 20px;
+    margin-right : 160px;
+    text-align: right;
+}
+
+/* --- ARTIST PAGE SPECIFIC STYLES --- */
+
+.artist-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 30px;
+    margin-bottom: 40px;
+    padding: 30px 0;
+}
+
+.artist-cover-large {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+    align-self: center;
+}
+
+.artist-details {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text-white);
+}
+
+.artist-name {
+    font-size: 6em;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.monthly-listeners {
+    font-size: 1.2em;
+    color: var(--color-text-light);
+    margin-bottom: 15px;
+}
+
+.listener-count {
+    font-weight: bold;
+    color: var(--color-text-white);
+}
+
+.artist-bio {
+    color: var(--color-text-light);
+    font-style: italic;
+    max-width: 800px;
+    line-height: 1.5;
+}
+
+.track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.track-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px var(--padding-card);
+    border-radius: var(--border-radius);
+    background-color: var(--color-background-card);
+    transition: background-color 0.2s;
+}
+
+.track-item:hover {
+    background-color: #282828;
+}
+
+.track-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.track-number {
+    width: 20px;
+    text-align: right;
+    color: var(--color-text-light);
+}
+
+.track-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.track-album-cover {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.track-details {
+    display: flex;
+    gap: 30px;
+    font-size: 0.9em;
+    color: var(--color-text-light);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: var(--color-primary);
+}
+
+/* --- ALBUM PAGE SPECIFIC STYLES --- */
+
+.album-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 30px;
+    margin-bottom: 40px;
+    padding: 30px 0;
+    background: linear-gradient(180deg, #303030 0%, var(--color-background-dark) 100%);
+    padding-bottom: 60px;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+
+.album-cover-large {
+    width: 250px;
+    height: 250px;
+    border-radius: var(--border-radius);
+    object-fit: cover;
+    box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+}
+
+.album-details {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text-white);
+}
+
+.album-type {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.album-name-title {
+    font-size: 4em;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0 0 10px 0;
+}
+
+.album-meta {
+    font-size: 1em;
+    color: var(--color-text-light);
+}
+
+.artist-link-small {
+    font-weight: bold;
+    color: var(--color-text-white);
+}
+
+.artist-link-small:hover {
+    text-decoration: underline;
+}
+
+.meta-separator {
+    margin: 0 8px;
+}
+
+.track-header-row {
+    display: flex;
+    padding: 10px 0;
+    margin: 0 var(--padding-card);
+    border-bottom: 1px solid #303030;
+    color: var(--color-text-light);
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.track-name-header {
+    flex-grow: 1;
+    margin-left: 35px;
+}
+
+.track-duration-header {
+    width: 100px;
+    text-align: right;
+}
+
+.track-note-header {
+    width: 75px;
+    text-align: right;
+}
+
+.track-item-album {
+    background-color: transparent;
+}
+
+.track-item-album:hover {
+    background-color: var(--color-background-card);
+}
+
+.track-item-album .track-info {
+    flex-grow: 1;
+    gap: 15px;
+}
+
+.track-item-album .track-text-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.track-item-album .track-artist {
+    font-size: 0.8em;
+    color: var(--color-text-light);
+}
+
+.track-item-album .track-details {
+    width: 100px;
+    justify-content: flex-end;
+}
+
+/* --- ARTISTS PAGE SPECIFIC STYLES --- */
+.page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.content-section {
+    margin-bottom: 40px;
+}
+
+.card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+
+.card-item {
+    flex: 0 0 200px;
+    background-color: #181818;
+    padding: 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.card-item:hover {
+    background-color: #282828;
+}
+
+.card-item a {
+    display: block;
+    text-align: center;
+}
+
+.card-item.artist img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.card-item h5 {
+    color: #FFFFFF;
+    font-size: 16px;
+    margin-top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- SEARCH PAGE SPECIFIC STYLES --- */
+
+.search-title {
+    margin-bottom: 40px;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+.card-grid {
+    flex-wrap: wrap;
+}
+
+.no-result {
+    color: var(--color-text-light);
+    font-style: italic;
+    padding: 10px 0;
+}
+
+.track-list-search .track-item {
+    background-color: transparent;
+}
+
+.track-list-search .track-item:hover {
+    background-color: var(--color-background-card);
+}
+
+
+.track-list-search .track-artist {
+    display: block;
+    font-size: 0.85em;
+    color: var(--color-text-light);
+}
+
+/* --- ERROR PAGE SPECIFIC STYLES --- */
+
+.error-page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.error-title {
+    font-size: 3em;
+    color: var(--color-text-white);
+    margin-bottom: 20px;
+}
+
+.error-details p {
+    font-size: 1.2em;
+    color: var(--color-text-light);
+    margin-bottom: 30px;
+}
+
+.large-button {
+    padding: 15px 30px;
+    font-size: 1.1em;
+}

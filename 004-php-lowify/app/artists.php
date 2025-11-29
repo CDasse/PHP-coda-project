@@ -60,28 +60,30 @@ foreach ($allArtists as $artist) {
     $artistCover = $artist['cover'];
 
     $artistesAsHTML .= <<<HTML
-            <div>
-                <a href="artist.php?id=$artistId">
-                    <div>
-                        <img src="$artistCover" alt="Photo de l'artiste">
-                        <div>
-                            <h5>$artistName</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-HTML;
+        <div class="card-item artist">
+            <a href="artist.php?id=$artistId">
+                <img src="$artistCover" alt="Photo de l'artiste: $artistName">
+                <h5>$artistName</h5>
+            </a>
+        </div>
+    HTML;
 }
 
 // final HTML structure of the page
 $html = <<< HTML
-<h1>Lowify - Artistes</h1>
-<div>
-{$artistesAsHTML}
+<div class="page-container">
+<a href="index.php" class="back-link">← Retour à l'accueil</a>
+    <h1>Lowify - Artistes</h1>
+    
+    <div class="content-section">
+        <div class="card-grid"> {$artistesAsHTML}
+        </div>
+    </div>
 </div>
 HTML;
 
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - Artistes"))
     ->addContent($html)
+    ->addStylesheet("inc/style.css")
     ->render();

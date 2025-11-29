@@ -3,18 +3,22 @@
 // files included
 require_once 'inc/page.inc.php';
 
-$message = $_GET["message"];
+$message = $_GET["message"] ?? "Erreur inconnue";
 
 // final HTML structure of the page
 $html = <<< HTML
-<h1>$message</h1>
-    <div>
-    <p>L'artiste demandé n'a malheureusement pas été trouvé.</p>
-    <a href="index.php">Retour à l'accueil</a>
+<div class="page-container error-page-content">
+    <h1 class="error-title">$message</h1>
+    
+    <div class="error-details">
+        <p>Votre requête ou recherche n'a pas pu aboutir ou la ressource demandée n'existe pas.</p>
+        <a href="index.php" class="button primary-button large-button">Retour à l'accueil</a>
+    </div>
 </div>
 HTML;
 
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - $message"))
     ->addContent($html)
+    ->addStylesheet("inc/style.css")
     ->render();

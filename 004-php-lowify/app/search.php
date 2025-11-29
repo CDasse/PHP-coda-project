@@ -69,7 +69,7 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
 // or generating HTML for each artist
 if (sizeof($artistsFound) == 0) {
     $artistsFoundAsHTML .= <<<HTML
-        <p>Aucun artiste ne correspond à votre recherche.</p>
+        <p class="no-result">Aucun artiste ne correspond à votre recherche.</p>
     HTML;
 } else {
 foreach ($artistsFound as $artist) {
@@ -78,14 +78,14 @@ foreach ($artistsFound as $artist) {
     $artistCover = $artist['cover'];
 
     $artistsFoundAsHTML .= <<<HTML
-        <div>
-        <a href="artist.php?id=$artistId">
-            <img src="$artistCover" alt="Photo de l'artiste">
-            <p>$artistName</p>
-        </a>
-        </div>
+            <div class="card-item artist">
+                <a href="artist.php?id=$artistId">
+                    <img src="$artistCover" alt="Photo de l'artiste: $artistName">
+                    <h5>$artistName</h5>
+                </a>
+            </div>
         HTML;
-}
+    }
 }
 
 /**
@@ -120,7 +120,7 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
 // or generating HTML for each album
 if (sizeof($albumsFound) == 0) {
     $albumsFoundAsHTML .= <<<HTML
-        <p>Aucun album ne correspond à votre recherche.</p>
+        <p class="no-result">Aucun album ne correspond à votre recherche.</p>
     HTML;
 } else {
     foreach ($albumsFound as $album) {
@@ -132,13 +132,14 @@ if (sizeof($albumsFound) == 0) {
         $artistId = $album['artist_id'];
 
         $albumsFoundAsHTML .= <<<HTML
-        <div>
-        <a href="album.php?id=$albumId">
-            <img src="$albumCover" alt="Photo de l'album">
-            <p>$albumName - <a href=artist.php?id=$artistId"">$artistName</a></p>
-        </a>
+        <div class="card-item album">
+            <a href="album.php?id=$albumId">
+                <img src="$albumCover" alt="Pochette de l'album: $albumName">
+                <h5>$albumName</h5>
+                <p><a href="artist.php?id=$artistId">$artistName</a></p>
+            </a>
         </div>
-HTML;
+        HTML;
     }
 }
 
@@ -176,9 +177,13 @@ SQL, ["search" => $search, "searchLike" => $searchLike]);
 // or generating HTML for each song
 if (sizeof($songsFound) == 0) {
     $songsFoundAsHTML .= <<<HTML
-        <p>Aucune chanson ne correspond à votre recherche.</p>
+        <p class="no-result">Aucune chanson ne correspond à votre recherche.</p>
     HTML;
 } else {
+    $songsFoundAsHTML .= <<<HTML
+        <div class="track-list track-list-search">
+    HTML;
+
     foreach ($songsFound as $song) {
         $songName = $song['song_name'];
         $songDuration = $song['song_duration'];
@@ -191,30 +196,59 @@ if (sizeof($songsFound) == 0) {
         $songDurationInMMSS = timeInMMSS($songDuration);
 
         $songsFoundAsHTML .= <<<HTML
-        <div>
-            <p>$songName</p>
-            <p>$songDurationInMMSS</p>
-            <p>$songNote</p>
-            <p><a href="album.php?id=$albumId">$albumName</a></p>
-            <p><a href="artist.php?id=$artistId">$artistName</a></p>
+        <div class="track-item track-item-album">
+            <div class="track-info">
+                <div class="track-text-info">
+                    <span class="track-name">$songName</span>
+                    <span class="track-artist">
+                        <a href="artist.php?id=$artistId">$artistName</a>
+                        <span class="meta-separator"> • </span>
+                        <a href="album.php?id=$albumId">$albumName</a>
+                    </span>
+                </div>
+            </div>
+            <div class="track-details">
+                <span class="track-duration">$songDurationInMMSS</span>
+                <span class="track-note-small">Note: $songNote/5</span>
+            </div>
         </div>
-HTML;
+        HTML;
     }
+    $songsFoundAsHTML .= <<<HTML
+        </div>
+    HTML;
 }
 
 // final HTML structure of the page
 $html = <<< HTML
-<a href="index.php">Retour à l'accueil</a>
-<h1>Recherche : $search</h1>
-<h2>Artistes</h2>
-$artistsFoundAsHTML
-<h2>Albums</h2>
-$albumsFoundAsHTML
-<h2>Chansons</h2>
-$songsFoundAsHTML
+<div class="page-container">
+    <a href="index.php" class="back-link">← Retour à l'accueil</a>
+    
+    <h1 class="search-title">Résultats pour : "$search"</h1>
+
+    <div class="content-section">
+        <h2>Artistes</h2>
+        <div class="card-grid">
+            $artistsFoundAsHTML
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h2>Albums</h2>
+        <div class="card-grid">
+            $albumsFoundAsHTML
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h2>Chansons</h2>
+        $songsFoundAsHTML
+    </div>
+</div>
 HTML;
 
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - Recherche"))
     ->addContent($html)
+    ->addStylesheet("inc/style.css")
     ->render();

@@ -84,13 +84,18 @@ $albumReleaseDateInDMY = dateInDMY($albumReleaseDate);
 
 // generating the HTML block containing album information
 $albumInfoAsHTML = <<<HTML
-    <div>
-        <img src="$albumCover" alt="Photo de l'album">
-        <div>
-            <p><a href="artist.php?id=$artistId">$artistName</a></p>
-            <p>$albumReleaseDateInDMY</p>
+    <header class="album-header">
+        <img src="$albumCover" alt="Pochette de l'album: $albumName" class="album-cover-large">
+        <div class="album-details">
+            <p class="album-type">Album</p>
+            <h1 class="album-name-title">$albumName</h1>
+            <p class="album-meta">
+                Par <a href="artist.php?id=$artistId" class="artist-link-small">$artistName</a>
+                <span class="meta-separator"> • </span>
+                $albumReleaseDateInDMY
+            </p>
         </div>
-    </div>
+    </header>
 HTML;
 
 /**
@@ -125,24 +130,42 @@ foreach ($songsOfAlbum as $song) {
     $songDurationInMMSS = timeInMMSS($songDuration);
 
     $songsOfAlbumAsHTML .= <<<HTML
-        <div>
-            <p>$songName</p>
-            <p>$songDurationInMMSS</p>
-            <p>$songNote</p>
+        <div class="track-item track-item-album">
+            <div class="track-info">
+                <div class="track-text-info">
+                    <span class="track-name">$songName</span>
+                    <span class="track-artist">$artistName</span>
+                </div>
+            </div>
+            <div class="track-details">
+                <span class="track-duration">$songDurationInMMSS</span>
+                <span class="track-note-small">$songNote/5</span>
+            </div>
         </div>
-HTML;
+    HTML;
 }
 
 // final HTML structure of the page
 $html = <<< HTML
-<h1>$albumName</h1>
-<div>
-$albumInfoAsHTML
-$songsOfAlbumAsHTML
+<div class="page-container">
+    <a href="index.php" class="back-link">← Retour à l'accueil</a>
+    $albumInfoAsHTML
+    <div class="content-section">
+        <h2>Pistes de l'album</h2>
+        <div class="track-list">
+            <div class="track-header-row">
+                <span class="track-name-header">TITRE</span>
+                <span class="track-duration-header">DURÉE</span>
+                <span class="track-note-header">NOTE</span>
+            </div>
+            $songsOfAlbumAsHTML
+        </div>
+    </div>
 </div>
 HTML;
 
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - $albumName"))
     ->addContent($html)
+    ->addStylesheet("inc/style.css")
     ->render();

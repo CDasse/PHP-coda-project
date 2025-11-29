@@ -85,13 +85,17 @@ $artistMonthlyListenersInLetter = numberWithLetter($artistMonthlyListeners);
 
 // generating the HTML block containing artist information
 $artistInfoAsHTML = <<<HTML
-    <div>
-        <img src="$artistCover" alt="Photo de l'artiste">
-        <div>
-            <p>$artistBio</p>
-            <p>$artistMonthlyListenersInLetter</p>
+    <header class="artist-header">
+        <img src="$artistCover" alt="Photo de l'artiste: $artistName" class="artist-cover-large">
+        <div class="artist-details">
+            <h1 class="artist-name">$artistName</h1>
+            <p class="monthly-listeners">
+                <span class="listener-count">$artistMonthlyListenersInLetter</span>
+                <span class="listener-label">d'auditeurs mensuels</span>
+            </p>
+            <p class="artist-bio">$artistBio</p>
         </div>
-    </div>
+    </header>
 HTML;
 
 
@@ -107,9 +111,10 @@ try {
         song.name AS song_name,
         song.duration AS song_duration,
         song.note AS song_note,
-        album.cover AS album_cover
+        album.cover AS album_cover,
+        album.id AS album_id
     FROM song
-    INNER JOIN album ON album.artist_id = song.artist_id
+    INNER JOIN album ON album.id = song.album_id
     WHERE song.artist_id = :idArtist
     ORDER BY song.note DESC
     LIMIT 5
@@ -126,20 +131,25 @@ foreach ($artistTop5Songs as $song) {
     $songDuration = $song['song_duration'];
     $songNote = $song['song_note'];
     $albumCover = $song['album_cover'];
+    $albumId = $song['album_id'];
 
     // convert duration into MM:SS format
     $songDurationInMMSS = timeInMMSS($songDuration);
 
     $artistTop5SongsAsHTML .= <<<HTML
-        <div>
-            <img src="$albumCover" alt="Photo de l'artiste">
-            <div>
-                <h5>$songName</h5>
-                <p>$songDurationInMMSS</p>
-                <p>$songNote</p>
+        <div class="track-item">
+            <div class="track-info">
+                <a href="album.php?id=$albumId" class="track-link">
+                    <img src="$albumCover" alt="Pochette de l'album" class="track-album-cover">
+                    <span class="track-name">$songName</span>
+                </a>
+            </div>
+            <div class="track-details">
+                <span class="track-duration">$songDurationInMMSS</span>
+                <span class="track-note">Note: $songNote/5</span>
             </div>
         </div>
-HTML;
+    HTML;
 }
 
 /**
@@ -176,29 +186,38 @@ foreach ($artistAlbums as $album) {
 
     // generating the HTML block containing album information
     $artistAlbumsAsHTML .= <<<HTML
-        <div>
-        <a href="album.php?id=$albumId">
-            <img src="$albumCover" alt="Photo de l'artiste">
-            <div>
+        <div class="card-item album">
+            <a href="album.php?id=$albumId">
+                <img src="$albumCover" alt="Pochette de l'album: $albumName">
                 <h5>$albumName</h5>
                 <p>$albumReleaseDateInDMY</p>
-            </div>
-        </a>
+            </a>
         </div>
-HTML;
+    HTML;
 }
 
 // final HTML structure of the page
 $html = <<< HTML
-<h1>$artistName</h1>
-<div>
+<div class="page-container">
+    <a href="index.php" class="back-link">← Retour à l'accueil</a>
     $artistInfoAsHTML
-    $artistTop5SongsAsHTML
-    $artistAlbumsAsHTML
+    <div class="content-section">
+        <h2>Morceaux Populaires</h2>
+        <div class="track-list">
+            $artistTop5SongsAsHTML
+        </div>
+    </div>
+    <div class="content-section">
+        <h2>Albums</h2>
+        <div class="card-grid">
+            $artistAlbumsAsHTML
+        </div>
+    </div>
 </div>
 HTML;
 
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify - $artistName"))
     ->addContent($html)
+    ->addStylesheet("inc/style.css")
     ->render();

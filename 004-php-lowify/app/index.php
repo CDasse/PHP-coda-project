@@ -66,13 +66,13 @@ foreach ($top5Artists as $artist) {
     $artistCover = $artist['cover'];
 
     $top5ArtistsAsHTML .= <<<HTML
-        <div>
-        <a href="artist.php?id=$artistId">
-            <img src="$artistCover" alt="Photo de l'artiste">
-            <p>$artistName</p>
-        </a>
+        <div class="card-item artist">
+            <a href="artist.php?id=$artistId">
+                <img src="$artistCover" alt="Photo de l'artiste: $artistName">
+                <h5>$artistName</h5>
+            </a>
         </div>
-HTML;
+    HTML;
 }
 
 /**
@@ -109,13 +109,14 @@ foreach ($top5RecentAlbums as $album) {
     $artistId = $album['artist_id'];
 
     $top5RecentAlbumsAsHTML .= <<<HTML
-        <div>
-        <a href="album.php?id=$albumId">
-            <img src="$albumCover" alt="Photo de l'album">
-            <p>$albumName - <a href=artist.php?id=$artistId"">$artistName</a></p>
-        </a>
+        <div class="card-item album">
+            <a href="album.php?id=$albumId">
+                <img src="$albumCover" alt="Pochette de l'album: $albumName">
+                <h5>$albumName</h5>
+                <p><a href="artist.php?id=$artistId">$artistName</a></p>
+            </a>
         </div>
-HTML;
+    HTML;
 }
 
 /**
@@ -155,39 +156,56 @@ foreach ($top5NotationAlbums as $album) {
     $artistId = $album['artist_id'];
 
     $top5NotationAlbumsAsHTML .= <<<HTML
-        <div>
-        <a href="album.php?id=$albumId">
-            <img src="$albumCover" alt="Photo de l'album">
-            <p>$albumName - <a href=artist.php?id=$artistId"">$artistName</a></p>
-        </a>
+        <div class="card-item album">
+            <a href="album.php?id=$albumId">
+                <img src="$albumCover" alt="Pochette de l'album: $albumName">
+                <h5>$albumName</h5>
+                <p><a href="artist.php?id=$artistId">$artistName</a></p>
+            </a>
         </div>
-HTML;
+    HTML;
 }
 
 // final HTML structure of the page
 $html = <<< HTML
-<h1>Accueil</h1>
-<div>
-<form action="search.php" method="POST">
-<input type="search" id="site-search" name="search" />
-<button>Rechercher</button>
-</form>
-</div>
-<h2>Top 5 des artistes les plus populaires</h2>
-<div>
-$top5ArtistsAsHTML
-</div>
-<h2>Top 5 des albums les plus récents</h2>
-<div>
-$top5RecentAlbumsAsHTML
-</div>
-<h2>Top 5 des albums les mieux notés</h2>
-<div>
-$top5NotationAlbumsAsHTML
+<div class="page-container">
+    <h1>Lowify</h1>
+    
+    <div class="search-section">
+        <form action="search.php" method="POST" class="search-form">
+            <input type="search" id="site-search" name="search" placeholder="Artistes, chansons ou albums..." />
+            <button type="submit">Rechercher</button>
+        </form>
+    </div>
+    
+    <div class="content-section">
+        <h2>Top 5 des artistes les plus populaires</h2>
+        <div class="card-grid">
+            $top5ArtistsAsHTML
+        </div>
+        <p class="view-all-link">
+                <a href="artists.php" class="button primary-button">Voir tous les artistes</a>
+        </p>
+    </div>
+    
+    <div class="content-section">
+        <h2>Top 5 des albums les plus récents</h2>
+        <div class="card-grid">
+            $top5RecentAlbumsAsHTML
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h2>Top 5 des albums les mieux notés</h2>
+        <div class="card-grid">
+            $top5NotationAlbumsAsHTML
+        </div>
+    </div>
 </div>
 HTML;
 
 // displaying the page using HTMLPage class
 echo (new HTMLPage(title: "Lowify"))
     ->addContent($html)
+    ->addStylesheet("inc/style.css")
     ->render();
