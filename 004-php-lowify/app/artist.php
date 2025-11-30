@@ -137,6 +137,7 @@ foreach ($artistTop5Songs as $song) {
 
     // convert duration into MM:SS format
     $songDurationInMMSS = timeInMMSS($songDuration);
+    $songNoteFormatted = noteFormatted($songNote);
 
     $artistTop5SongsAsHTML .= <<<HTML
         <div class="track-item">
@@ -148,7 +149,7 @@ foreach ($artistTop5Songs as $song) {
             </div>
             <div class="track-details">
                 <span class="track-duration">$songDurationInMMSS</span>
-                <span class="track-note">Note: $songNote/5</span>
+                <span class="track-note">Note: $songNoteFormatted</span>
             </div>
         </div>
     HTML;

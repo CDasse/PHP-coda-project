@@ -244,7 +244,7 @@ $html = <<< HTML
         <form action="search.php" method="POST" class="search-form">
             <input type="search" id="site-search" name="search" list="suggestions" placeholder="Artistes, chansons ou albums..." />
             <datalist id="suggestions">
-            $allNamesForSearchAsHTML
+                $allNamesForSearchAsHTML
             </datalist>
             <button type="submit">Rechercher</button>
         </form>

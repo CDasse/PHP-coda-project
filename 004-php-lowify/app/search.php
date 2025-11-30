@@ -197,6 +197,7 @@ if (sizeof($songsFound) == 0) {
         $artistId = $song['artist_id'];
 
         $songDurationInMMSS = timeInMMSS($songDuration);
+        $songNoteFormatted = noteFormatted($songNote);
 
         $songsFoundAsHTML .= <<<HTML
         <div class="track-item track-item-album">
@@ -212,7 +213,7 @@ if (sizeof($songsFound) == 0) {
             </div>
             <div class="track-details">
                 <span class="track-duration">$songDurationInMMSS</span>
-                <span class="track-note-small">Note: $songNote/5</span>
+                <span class="track-note-small">Note: $songNoteFormatted</span>
             </div>
         </div>
         HTML;
