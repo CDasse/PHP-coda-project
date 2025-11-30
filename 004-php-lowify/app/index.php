@@ -265,6 +265,9 @@ $html = <<< HTML
         <div class="card-grid">
             $top5RecentAlbumsAsHTML
         </div>
+        <p class="view-all-link">
+            <a href="liked_songs.php" class="button primary-button" title="Voir mes titres likés">Voir mes titres likés</a>
+        </p>
     </div>
     
     <div class="content-section">
@@ -272,6 +275,9 @@ $html = <<< HTML
         <div class="card-grid">
             $top5NotationAlbumsAsHTML
         </div>
+        <p class="view-all-link">
+            <a href="liked_songs.php" class="button primary-button" title="Voir mes titres likés">Voir mes titres likés</a>
+        </p>
     </div>
 </div>
 HTML;

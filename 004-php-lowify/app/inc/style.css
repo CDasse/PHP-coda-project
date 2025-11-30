@@ -156,6 +156,10 @@ a:hover {
     text-align: right;
 }
 
+.view-songs-link {
+    text-align: center;
+}
+
 /* --- ARTIST PAGE SPECIFIC STYLES --- */
 
 .artist-header {
@@ -381,6 +385,7 @@ a:hover {
 }
 
 /* --- ARTISTS PAGE SPECIFIC STYLES --- */
+
 .page-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -498,4 +503,88 @@ a:hover {
 
 a[title="Like/Unlike la chanson"] {
     font-size: 1.3rem;
+}
+
+/* --- LIKED SONGS PAGE SPECIFIC STYLES --- */
+.liked-songs-page .content-section {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.liked-songs-page .track-list-search {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.liked-songs-page .track-item-album {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background-color: var(--color-background-card);
+    transition: background-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.liked-songs-page .track-item-album:hover {
+    background-color: #282828;
+}
+
+.liked-songs-page .track-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    align-items: flex-start;
+}
+
+.liked-songs-page .track-text-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.liked-songs-page .track-name {
+    font-weight: bold;
+    color: var(--color-text-white);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.liked-songs-page .track-artist {
+    font-size: 0.85em;
+    color: var(--color-text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.liked-songs-page .track-details {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+    font-size: 0.9em;
+    color: var(--color-text-light);
+}
+
+.liked-songs-page .track-duration,
+.liked-songs-page .track-note-small,
+.liked-songs-page a[title="Like/Unlike la chanson"] {
+    white-space: nowrap;
+}
+
+.liked-songs-page .no-result {
+    text-align: center;
+    color: var(--color-text-light);
+    font-style: italic;
+    padding: 20px 0;
+    font-size: 1.1em;
 }
