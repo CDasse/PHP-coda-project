@@ -12,7 +12,7 @@ $password = "lowifypassword";
 
 $db = null;
 
-$search = $_POST["search"];
+$search = $_POST["search"] ?? '';
 $searchLike = "%". $search . "%";
 
 $artistsFound = [];
@@ -159,6 +159,8 @@ try {
         song.name AS song_name,
         song.duration AS song_duration,
         song.note AS song_note,
+        song.is_liked AS song_is_liked,
+        song.id AS song_id,
         album.name AS album_name,
         album.id AS album_id,
         artist.name AS artist_name,
@@ -191,6 +193,8 @@ if (sizeof($songsFound) == 0) {
         $songName = $song['song_name'];
         $songDuration = $song['song_duration'];
         $songNote = $song['song_note'];
+        $songIsLiked = $song['song_is_liked'];
+        $songId = $song['song_id'];
         $albumName = $song['album_name'];
         $albumId = $song['album_id'];
         $artistName = $song['artist_name'];
@@ -198,6 +202,8 @@ if (sizeof($songsFound) == 0) {
 
         $songDurationInMMSS = timeInMMSS($songDuration);
         $songNoteFormatted = noteFormatted($songNote);
+
+        $isLiked = $song['song_is_liked'] == 0 ? '♡' : '♥';
 
         $songsFoundAsHTML .= <<<HTML
         <div class="track-item track-item-album">
@@ -212,6 +218,7 @@ if (sizeof($songsFound) == 0) {
                 </div>
             </div>
             <div class="track-details">
+                <a href="like_song.php?id=$songId" title="Like/Unlike la chanson">$isLiked</a>
                 <span class="track-duration">$songDurationInMMSS</span>
                 <span class="track-note-small">Note: $songNoteFormatted</span>
             </div>

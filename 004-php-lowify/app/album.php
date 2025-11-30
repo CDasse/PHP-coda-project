@@ -109,7 +109,9 @@ try {
     SELECT 
         song.name AS song_name,
         song.duration AS song_duration,
-        song.note AS song_note
+        song.note AS song_note,
+        song.is_liked AS song_is_liked,
+        song.id AS song_id
     FROM song
     WHERE song.album_id = :idAlbum
     ORDER BY song.id ASC
@@ -125,10 +127,14 @@ foreach ($songsOfAlbum as $song) {
     $songName = $song['song_name'];
     $songDuration = $song['song_duration'];
     $songNote = $song['song_note'];
+    $songIsLiked = $song['song_is_liked'];
+    $songId = $song['song_id'];
 
     // convert duration into MM:SS format
     $songDurationInMMSS = timeInMMSS($songDuration);
     $songNoteFormatted = noteFormatted($songNote);
+
+    $isLiked = $song['song_is_liked'] == 0 ? '♡' : '♥';
 
     $songsOfAlbumAsHTML .= <<<HTML
         <div class="track-item track-item-album">
@@ -139,6 +145,7 @@ foreach ($songsOfAlbum as $song) {
                 </div>
             </div>
             <div class="track-details">
+                <a href="like_song.php?id=$songId" title="Like/Unlike la chanson">$isLiked</a>
                 <span class="track-duration">$songDurationInMMSS</span>
                 <span class="track-note-small">$songNoteFormatted</span>
             </div>

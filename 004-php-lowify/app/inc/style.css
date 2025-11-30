@@ -257,6 +257,7 @@ a:hover {
     gap: 30px;
     font-size: 0.9em;
     color: var(--color-text-light);
+    align-items: center;
 }
 
 .back-link {
@@ -376,6 +377,7 @@ a:hover {
 .track-item-album .track-details {
     width: 100px;
     justify-content: flex-end;
+    align-items: center;
 }
 
 /* --- ARTISTS PAGE SPECIFIC STYLES --- */
@@ -490,4 +492,10 @@ a:hover {
 .large-button {
     padding: 15px 30px;
     font-size: 1.1em;
+}
+
+/* --- LIKE/UNLIKE SONG SPECIFIC STYLES --- */
+
+a[title="Like/Unlike la chanson"] {
+    font-size: 1.3rem;
 }

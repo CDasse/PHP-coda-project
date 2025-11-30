@@ -111,6 +111,8 @@ try {
         song.name AS song_name,
         song.duration AS song_duration,
         song.note AS song_note,
+        song.is_liked AS song_is_liked,
+        song.id AS song_id,
         album.cover AS album_cover,
         album.id AS album_id,
         album.name AS album_name
@@ -131,6 +133,8 @@ foreach ($artistTop5Songs as $song) {
     $songName = $song['song_name'];
     $songDuration = $song['song_duration'];
     $songNote = $song['song_note'];
+    $songIsLiked = $song['song_is_liked'];
+    $songId = $song['song_id'];
     $albumCover = $song['album_cover'];
     $albumId = $song['album_id'];
     $albumName = $song['album_name'];
@@ -139,15 +143,17 @@ foreach ($artistTop5Songs as $song) {
     $songDurationInMMSS = timeInMMSS($songDuration);
     $songNoteFormatted = noteFormatted($songNote);
 
+    $isLiked = $song['song_is_liked'] == 0 ? '♡' : '♥';
+
     $artistTop5SongsAsHTML .= <<<HTML
         <div class="track-item">
             <div class="track-info">
                 <a href="album.php?id=$albumId"  title="$albumName - Détails de l'album" class="track-link">
-                    <img src="$albumCover" alt="Pochette de l'album" class="track-album-cover">
+                    <img src="$albumCover" alt="Pochette de l'album" class="track-album-cover"></a>
                     <span class="track-name">$songName</span>
-                </a>
             </div>
             <div class="track-details">
+                <a href="like_song.php?id=$songId" title="Like/Unlike la chanson">$isLiked</a>
                 <span class="track-duration">$songDurationInMMSS</span>
                 <span class="track-note">Note: $songNoteFormatted</span>
             </div>
