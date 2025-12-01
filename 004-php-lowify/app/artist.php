@@ -12,7 +12,7 @@ $password = "lowifypassword";
 
 $db = null;
 
-$idArtist = $_GET["id"];
+$idArtist = $_GET["id"] ?? 0;
 $error = "error.php?message=Artiste inconnu";
 
 $artistInfos = [];

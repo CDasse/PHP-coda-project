@@ -12,7 +12,7 @@ $password = "lowifypassword";
 
 $db = null;
 
-$search = $_POST["search"] ?? '';
+$search = $_POST["search"] ?? "";
 $searchLike = "%". $search . "%";
 
 $artistsFound = [];

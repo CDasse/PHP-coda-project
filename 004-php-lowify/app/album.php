@@ -11,7 +11,7 @@ $username = "lowify";
 $password = "lowifypassword";
 
 $db = null;
-$idAlbum = $_GET["id"];
+$idAlbum = $_GET["id"]  ?? 0;
 $error = "error.php?message=Album inconnu";
 
 $albumInfos = [];

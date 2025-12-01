@@ -13,7 +13,7 @@ $password = "lowifypassword";
 $db = null;
 $error = "error.php?message=Chanson inconnue";
 
-$idSong = $_GET["id"];
+$idSong = $_GET["id"] ?? 0;
 
 $songInfos = [];
 $newValueIsLike = null;
