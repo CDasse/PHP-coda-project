@@ -12,6 +12,8 @@ $password = "lowifypassword";
 
 $db = null;
 
+$error = "error.php?message=Erreur";
+
 $allArtists = [];
 $artistesAsHTML = "";
 
@@ -49,8 +51,8 @@ try {
     FROM artist
 SQL);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
-    exit;
+   header("Location: $error");
+   exit;
 }
 
 // generating HTML for each artist
