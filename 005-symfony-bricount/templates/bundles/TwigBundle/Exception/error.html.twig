@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Erreur {{ status_code }}
+{% endblock %}
+
+{% block body %}
+    <h1> Une erreur est survenue</h1>
+    <p>
+        Désolé, une erreur s'est produite lors du traitement de votre requête.
+    </p>
+    <p>
+        Code d'erreur : {{ status_code }}
+    </p>
+    <p><a href="{{ path('home') }}">Retourner à la page d'accueil</a></p>
+{% endblock %}

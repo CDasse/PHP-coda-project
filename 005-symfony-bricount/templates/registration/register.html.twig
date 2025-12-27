@@ -1,0 +1,17 @@
+{% extends '_layouts/standard.html.twig' %}
+
+{% block title %}Inscription - Bricount{% endblock %}
+
+{% block content %}
+    <h1>S'inscrire sur Bricount</h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword) }}
+    {{ form_row(registrationForm.agreeTerms) }}
+
+    <button type="submit" class="btn">S'inscrire</button>
+    {{ form_end(registrationForm) }}
+{% endblock %}

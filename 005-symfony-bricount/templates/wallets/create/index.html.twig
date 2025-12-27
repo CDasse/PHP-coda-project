@@ -1,0 +1,12 @@
+{% extends '_layouts/in_app.html.twig' %}
+
+{% block title %}Création de portefeuille - Bricount{% endblock %}
+
+{% block content %}
+    <h1>Créer un nouveau portefeuille</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_end(form) }}
+
+{% endblock %}

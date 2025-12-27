@@ -1,0 +1,30 @@
+{% extends '_layouts/in_app.html.twig' %}
+
+{% block title %}Liste des portefeuilles - Bricount{% endblock %}
+
+{% block content %}
+    <h1>Liste des portefeuilles</h1>
+
+    <div>
+        <a href="{{ path('wallets_create') }}">
+            Créer un portefeuille
+        </a>
+    </div>
+
+
+
+    <ul>
+        {% for wallet in wallets %}
+            <li>
+                <a href="{{ path('wallets_show', {'uid': wallet.uid}) }}">{{ wallet.label }}
+                    - {{ wallet.totalAmount /100 }} €</a>
+            </li>
+
+            <div>
+                <a href="{{ path('wallets_edit', {'uid': wallet.uid}) }}">
+                    Modifier le portefeuille
+                </a>
+            </div>
+        {% endfor %}
+    </ul>
+{% endblock %}

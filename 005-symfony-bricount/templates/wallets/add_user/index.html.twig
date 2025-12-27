@@ -1,0 +1,12 @@
+{% extends '_layouts/in_app.html.twig' %}
+
+{% block title %}Ajout d'un utilisateur - Portefeuille {{ wallet.label }} - Bricount{% endblock %}
+
+{% block content %}
+    <h1>Ajout d'un utilisateur - Portefeuille {{ wallet.label }}</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.userId) }}
+    {{ form_row((form.role)) }}
+    {{ form_end(form) }}
+{% endblock %}

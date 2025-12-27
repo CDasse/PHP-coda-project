@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset("styles/menu.css") }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {# menu #}
+        {% include '_components/menu.html.twig' %}
+
+        {# contenu #}
+        {# messages flashes #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert-{{ label }}" role="alert">
+                    {{ message|raw }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% block content %}
+        {% endblock %}
+    </div>
+{% endblock %}
