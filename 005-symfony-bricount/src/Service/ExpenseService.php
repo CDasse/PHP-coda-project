@@ -2,13 +2,19 @@
 
 namespace App\Service;
 
+use App\DTO\ExpenseDTO;
+use App\Entity\Expense;
+use App\Entity\User;
 use App\Entity\Wallet;
 use App\Repository\ExpenseRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class ExpenseService
 {
     public function __construct(
-        private readonly ExpenseRepository $expenseRepository
+        private readonly ExpenseRepository      $expenseRepository,
+        private readonly EntityManagerInterface $em,
     )
     {
     }
@@ -21,5 +27,22 @@ class ExpenseService
     public function countExpensesForWallet(Wallet $wallet): int
     {
         return $this->expenseRepository->countExpensesForWallet($wallet);
+    }
+
+    public function createExpense(Wallet $wallet, ExpenseDTO $dto, User $creator): Expense
+    {
+        $expense = new Expense();
+
+        $expense->setUid(Uuid::v7()->toString());
+        $expense->setAmount($dto->amount);
+        $expense->setDescription($dto->description);
+        $expense->setWallet($wallet);
+        $expense->setCreatedBy($creator);
+        $expense->setCreatedDate(new \DateTime());
+
+        $this->em->persist($expense);
+        $this->em->flush();
+
+        return $expense;
     }
 }

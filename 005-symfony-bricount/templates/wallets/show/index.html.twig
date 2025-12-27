@@ -11,6 +11,12 @@
         </a>
     </div>
 
+    <div>
+        <a href="{{ path('expenses_create', {"uid": wallet.uid}) }}">
+            + Ajouter une dépense
+        </a>
+    </div>
+
     <h2>Montant total : {{ wallet.totalAmount / 100 }}</h2>
 
     <table class="table">
@@ -28,7 +34,7 @@
                 <td>{{ expense.createdDate | date('d/m/Y') }}</td>
                 <td>{{ expense.createdBy.name }}</td>
                 <td>{{ expense.description }}</td>
-                <td>{{ expense.amount / 100 }}</td>
+                <td>{{ (expense.amount / 100)|number_format(2, ',', ' ') }} €</td>
             </tr>
         {% endfor %}
         </tbody>

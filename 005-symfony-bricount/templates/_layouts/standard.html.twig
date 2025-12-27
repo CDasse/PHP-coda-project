@@ -7,6 +7,10 @@
 
 {% block body %}
     <div class="container">
+
+        {# messages flash #}
+        {% include '_components/_flash_message.html.twig' %}
+        
         {% block content %}
         {% endblock %}
     </div>

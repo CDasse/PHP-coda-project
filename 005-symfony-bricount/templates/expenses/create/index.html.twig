@@ -1,0 +1,13 @@
+{% extends '_layouts/in_app.html.twig' %}
+
+{% block title %}Création de dépense - Bricount{% endblock %}
+
+{% block content %}
+    <h1>Créer une nouvelle dépense</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.amount) }}
+    {{ form_row(form.description) }}
+    {{ form_end(form) }}
+
+{% endblock %}

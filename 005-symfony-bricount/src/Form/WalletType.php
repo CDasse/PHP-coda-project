@@ -32,7 +32,9 @@ class WalletType extends AbstractType
                 "label" => "Nom du portefeuille",
                 "help" => "Le nom du portefeuille doit être entre 3 et 50 caractères."
             ])
-            ->add('submit', SubmitType::class);
+            ->add('submit', SubmitType::class, [
+                'label' => 'Enregistrer'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

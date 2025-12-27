@@ -10,15 +10,10 @@
         {# menu #}
         {% include '_components/menu.html.twig' %}
 
+        {# messages flash #}
+        {% include '_components/_flash_message.html.twig' %}
+
         {# contenu #}
-        {# messages flashes #}
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert-{{ label }}" role="alert">
-                    {{ message|raw }}
-                </div>
-            {% endfor %}
-        {% endfor %}
         {% block content %}
         {% endblock %}
     </div>
