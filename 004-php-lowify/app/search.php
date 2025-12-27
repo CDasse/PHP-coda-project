@@ -12,6 +12,8 @@ $password = "lowifypassword";
 
 $db = null;
 
+$error = "error.php?message=Erreur";
+
 $search = $_POST["search"] ?? "";
 $searchLike = "%". $search . "%";
 
@@ -61,7 +63,7 @@ try {
     )
 SQL, ["search" => $search, "searchLike" => $searchLike]);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    header("Location: $error");
     exit;
 }
 
@@ -112,7 +114,7 @@ try {
     )
 SQL, ["search" => $search, "searchLike" => $searchLike]);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    header("Location: $error");
     exit;
 }
 
@@ -155,7 +157,7 @@ if (sizeof($albumsFound) == 0) {
  **/
 try {
     $songsFound = $db->executeQuery(<<<SQL
-    SELECT 
+    SELECT
         song.name AS song_name,
         song.duration AS song_duration,
         song.note AS song_note,
@@ -174,7 +176,7 @@ try {
     )
 SQL, ["search" => $search, "searchLike" => $searchLike]);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    header("Location: $error");
     exit;
 }
 

@@ -10,6 +10,8 @@ $password = "lowifypassword";
 
 $db = null;
 
+$error = "error.php?message=Erreur";
+
 $top5Artists = [];
 $top5ArtistsAsHTML = "";
 $top5RecentAlbums = [];
@@ -59,7 +61,7 @@ try {
     LIMIT 5
 SQL);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    header("Location: $error");
     exit;
 }
 
@@ -100,7 +102,7 @@ try {
     LIMIT 5
 SQL);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    header("Location: $error");
     exit;
 }
 
@@ -147,7 +149,7 @@ try {
     LIMIT 5
 SQL);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    header("Location: $error");
     exit;
 }
 

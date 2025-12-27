@@ -14,6 +14,8 @@ $password = "lowifypassword";
 $db = null;
 $isLikedSong = 1;
 
+$error = "error.php?message=Erreur";
+
 $likedSongs = [];
 $likedSongsAsHTML = "";
 
@@ -44,7 +46,7 @@ try {
  **/
 try {
     $likedSongs = $db->executeQuery(<<<SQL
-    SELECT 
+    SELECT
         song.name AS song_name,
         song.duration AS song_duration,
         song.note AS song_note,
@@ -61,7 +63,7 @@ try {
     ORDER BY artist.name ASC
 SQL, ["isLikedSong" => $isLikedSong]);
 } catch (PDOException $ex) {
-    echo "Erreur lors de la requête en base de donnée : " . $ex->getMessage();
+    header("Location: $error");
     exit;
 }
 
