@@ -45,4 +45,14 @@ class ExpenseService
 
         return $expense;
     }
+
+    public function deleteExpense(Expense $expense, User $deletor): void
+    {
+        $expense->setisDeleted(true);
+        $expense->setDeletedBy($deletor);
+        $expense->setDeletedDate(new \DateTime());
+
+        $this->em->persist($expense);
+        $this->em->flush();
+    }
 }

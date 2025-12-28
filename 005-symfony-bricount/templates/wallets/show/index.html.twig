@@ -17,6 +17,12 @@
         </a>
     </div>
 
+    <div>
+        <a href="{{ path('wallets_delete', {'uid': wallet.uid}) }}">
+            Supprimer le portefeuille
+        </a>
+    </div>
+
     <h2>Montant total : {{ wallet.totalAmount / 100 }}</h2>
 
     <table class="table">
@@ -35,6 +41,8 @@
                 <td>{{ expense.createdBy.name }}</td>
                 <td>{{ expense.description }}</td>
                 <td>{{ (expense.amount / 100)|number_format(2, ',', ' ') }} €</td>
+                <td><a href="{{ path("expenses_delete", {"wallet_uid": wallet.uid, "expense_uid": expense.uid}) }}">Supprimer
+                        la dépense</a></td>
             </tr>
         {% endfor %}
         </tbody>

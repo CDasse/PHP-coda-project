@@ -24,6 +24,9 @@
                 <a href="{{ path('wallets_edit', {'uid': wallet.uid}) }}">
                     Modifier le portefeuille
                 </a>
+                <a href="{{ path('wallets_delete', {'uid': wallet.uid}) }}">
+                    Supprimer le portefeuille
+                </a>
             </div>
         {% endfor %}
     </ul>

@@ -21,6 +21,10 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $name = $form->get('name')->getData();
+
+            $user->setName($name);
+
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 

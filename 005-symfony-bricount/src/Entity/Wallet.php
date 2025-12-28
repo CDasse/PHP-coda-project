@@ -94,4 +94,5 @@ class Wallet extends BaseEntity
 
         return $this;
     }
+    
 }

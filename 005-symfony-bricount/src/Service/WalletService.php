@@ -77,4 +77,14 @@ class WalletService
         return $this->userRepository->findAvailableUsersForWallet($wallet);
     }
 
+    public function deleteWallet(Wallet $wallet, User $deletor): void
+    {
+        $wallet->setisDeleted(true);
+        $wallet->setDeletedBy($deletor);
+        $wallet->setDeletedDate(new \DateTime());
+
+        $this->em->persist($wallet);
+        $this->em->flush();
+    }
+
 }

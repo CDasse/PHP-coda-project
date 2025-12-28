@@ -39,7 +39,7 @@ final class AddUserController extends AbstractController
         if ("admin" !== $xUserWallet->getRole()) {
             $this->addFlash("danger", "Vous n'avez pas le droit de modifier ce portefeuille");
 
-            return $this->redirectToRoute('wallets_list');
+            return $this->redirectToRoute('wallets_show', ['uid' => $wallet->getUid()]);
         }
 
         $availableUsers = $walletService->findAvailableUsersForWallet($wallet);
