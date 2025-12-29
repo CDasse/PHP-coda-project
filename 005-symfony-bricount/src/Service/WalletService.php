@@ -39,7 +39,7 @@ class WalletService
         try {
             $xUserWallet = $this->xUserWalletRepository->getUserAccessOnWallet($user, $wallet);
         } catch (\Exception $e) {
-            
+
         }
 
         return $xUserWallet;
@@ -109,7 +109,7 @@ class WalletService
 
     public function getUserBalances(Wallet $wallet): array
     {
-        $totalAmount = $this->walletRepository->calculateTotalBalance($wallet);
+        $totalAmount = $this->walletRepository->calculateTotalBalanceSinceLastSettlement($wallet);
         $expenses = $this->expenseRepository->findExpensesSinceLastSettlement($wallet);
 
         if (empty($expenses)) {
