@@ -17,7 +17,7 @@
         {% for wallet in wallets %}
             <li>
                 <a href="{{ path('wallets_show', {'uid': wallet.uid}) }}">{{ wallet.label }}
-                    - {{ wallet.totalAmount /100 }} €</a>
+                    - {{ (wallet.totalAmount / 100)|number_format(2, ',', ' ') }} €</a>
             </li>
 
             <div>

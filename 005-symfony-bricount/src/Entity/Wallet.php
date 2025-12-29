@@ -27,7 +27,7 @@ class Wallet extends BaseEntity
     #[ORM\Column(options: ['default' => '[]'])]
     private array $paymentsDue = [];
 
-    #[ORM\Column(type: Types::JSON, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $lastSettlementDate = null;
 
     public function getId(): ?int
@@ -94,5 +94,5 @@ class Wallet extends BaseEntity
 
         return $this;
     }
-    
+
 }

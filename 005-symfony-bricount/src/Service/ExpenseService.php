@@ -15,6 +15,7 @@ class ExpenseService
     public function __construct(
         private readonly ExpenseRepository      $expenseRepository,
         private readonly EntityManagerInterface $em,
+        private readonly WalletService          $walletService,
     )
     {
     }
@@ -43,6 +44,9 @@ class ExpenseService
         $this->em->persist($expense);
         $this->em->flush();
 
+        $this->walletService->updateTotalBalance($wallet);
+        $this->walletService->getUserBalances($wallet);
+
         return $expense;
     }
 
@@ -54,5 +58,13 @@ class ExpenseService
 
         $this->em->persist($expense);
         $this->em->flush();
+
+        $this->walletService->updateTotalBalance($expense->getWallet());
+        $this->walletService->getUserBalances($expense->getWallet());
+    }
+
+    public function findExpensesSinceLastSettlement(Wallet $wallet): array
+    {
+        return $this->expenseRepository->findExpensesSinceLastSettlement($wallet);
     }
 }

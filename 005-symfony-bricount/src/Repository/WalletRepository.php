@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Expense;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Entity\XUserWallet;
@@ -27,5 +28,19 @@ class WalletRepository extends ServiceEntityRepository
             ->setParameter('user', $user);
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function calculateTotalBalance(Wallet $wallet): int
+    {
+        return
+            $this
+                ->createQueryBuilder('w')
+                ->select('COALESCE(SUM(e.amount), 0)')
+                ->leftJoin(Expense::class, 'e', 'WITH', 'w.id = e.wallet AND e.isDeleted = false')
+                ->andWhere('w.isDeleted = false')
+                ->andWhere('w.id = :walletId')
+                ->setParameter('walletId', $wallet->getId())
+                ->getQuery()
+                ->getSingleScalarResult();
     }
 }

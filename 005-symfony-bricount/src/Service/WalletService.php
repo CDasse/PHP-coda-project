@@ -6,6 +6,7 @@ use App\DTO\WalletDTO;
 use App\Entity\User;
 use App\Entity\Wallet;
 use App\Entity\XUserWallet;
+use App\Repository\ExpenseRepository;
 use App\Repository\UserRepository;
 use App\Repository\WalletRepository;
 use App\Repository\XUserWalletRepository;
@@ -20,7 +21,8 @@ class WalletService
         private readonly XUserWalletRepository  $xUserWalletRepository,
         private readonly EntityManagerInterface $em,
         private readonly XUserWalletService     $xUserWalletService,
-        private readonly UserRepository         $userRepository
+        private readonly UserRepository         $userRepository,
+        private readonly ExpenseRepository      $expenseRepository
     )
     {
     }
@@ -37,7 +39,7 @@ class WalletService
         try {
             $xUserWallet = $this->xUserWalletRepository->getUserAccessOnWallet($user, $wallet);
         } catch (\Exception $e) {
-
+            
         }
 
         return $xUserWallet;
@@ -85,6 +87,91 @@ class WalletService
 
         $this->em->persist($wallet);
         $this->em->flush();
+    }
+
+    public function updateTotalBalance(Wallet $wallet): void
+    {
+        $totalBalance = $this->walletRepository->calculateTotalBalance($wallet);
+
+        $wallet->setTotalAmount($totalBalance);
+
+        $this->em->persist($wallet);
+        $this->em->flush();
+    }
+
+    public function markAsSettled(Wallet $wallet): void
+    {
+        $wallet->setLastSettlementDate(new \DateTime());
+
+        $this->em->persist($wallet);
+        $this->em->flush();
+    }
+
+    public function getUserBalances(Wallet $wallet): array
+    {
+        $totalAmount = $this->walletRepository->calculateTotalBalance($wallet);
+        $expenses = $this->expenseRepository->findExpensesSinceLastSettlement($wallet);
+
+        if (empty($expenses)) {
+            return [];
+        }
+
+        $userMap = [];
+        foreach ($expenses as $expense) {
+            $user = $expense->getCreatedBy();
+            $userMap[$user->getName()] = $user;
+        }
+
+        $userCount = count($userMap);
+        $fairShare = $totalAmount / $userCount;
+
+        $balances = [];
+        foreach ($userMap as $name => $user) {
+            $balances[$name] = 0;
+        }
+
+        foreach ($expenses as $expense) {
+            $name = $expense->getCreatedBy()->getName();
+            $balances[$name] += $expense->getAmount();
+        }
+
+        foreach ($balances as $name => $paidAmount) {
+            $balances[$name] = round($balances[$name] - $fairShare, 2);
+        }
+
+        $creditors = [];
+        $debtors = [];
+
+        foreach ($balances as $name => $balance) {
+            if ($balance > 0) {
+                $creditors[$name] = $balance;
+            } elseif ($balance < 0) {
+                $debtors[$name] = abs($balance);
+            }
+        }
+
+        $transfers = [];
+
+        while (!empty($creditors) && !empty($debtors)) {
+            $creditorName = array_key_first($creditors);
+            $debtorName = array_key_first($debtors);
+
+            $amount = min($creditors[$creditorName], $debtors[$debtorName]);
+
+            $transfers[$debtorName][$creditorName] = $amount;
+
+            $creditors[$creditorName] -= $amount;
+            $debtors[$debtorName] -= $amount;
+
+            if ($creditors[$creditorName] == 0) {
+                unset($creditors[$creditorName]);
+            }
+            if ($debtors[$debtorName] == 0) {
+                unset($debtors[$debtorName]);
+            }
+        }
+
+        return $transfers;
     }
 
 }

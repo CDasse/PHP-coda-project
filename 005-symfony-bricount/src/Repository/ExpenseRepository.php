@@ -40,4 +40,16 @@ class ExpenseRepository extends ServiceEntityRepository
         ]);
     }
 
+    public function findExpensesSinceLastSettlement(Wallet $wallet): array
+    {
+        return
+            $this
+                ->createQueryBuilder('e')
+                ->innerJoin('e.wallet', 'w', 'WITH', 'w.isDeleted = false AND w.id = :walletId')
+                ->andWhere('e.isDeleted = false AND (w.lastSettlementDate IS NULL OR w.lastSettlementDate < e.createdDate)')
+                ->setParameter('walletId', $wallet->getId())
+                ->getQuery()
+                ->getResult();
+    }
+
 }

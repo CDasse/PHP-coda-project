@@ -46,12 +46,15 @@ final class ShowController extends AbstractController
             $maxPaginationPage = ceil($ndTotalExpenses / $limit);
         }
 
+        $balances = $walletService->getUserBalances($wallet);
+
         return $this->render('wallets/show/index.html.twig', [
             'wallet' => $wallet,
             'expenses' => $expenses,
             'maxPaginationPage' => $maxPaginationPage,
             'limit' => $limit,
-            'page' => $page
+            'page' => $page,
+            'balances' => $balances
         ]);
     }
 }
