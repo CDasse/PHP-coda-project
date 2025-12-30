@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\DTO\WalletDTO;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,9 +30,6 @@ class WalletType extends AbstractType
                 "required" => true,
                 "label" => "Nom du portefeuille",
                 "help" => "Le nom du portefeuille doit être entre 3 et 50 caractères."
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Enregistrer'
             ]);
     }
 

@@ -5,7 +5,6 @@ namespace App\Form;
 use App\DTO\ExpenseDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +18,6 @@ class ExpenseType extends AbstractType
     {
         $builder
             ->add('amount', MoneyType::class, [
-                'currency' => 'EUR',
                 'divisor' => 100, //permet d'enregistrer la valeur en centimes dans la base de données
                 'constraints' => [
                     new NotBlank(
@@ -45,9 +43,6 @@ class ExpenseType extends AbstractType
                 'label' => 'Description',
                 'required' => true,
                 'help' => "La description ne doit pas contenir plus de 200 caractères."
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Enregistrer',
             ]);
     }
 

@@ -3,93 +3,117 @@
 {% block title %}Portefeuille {{ wallet.label }} - Bricount{% endblock %}
 
 {% block content %}
-    <h1>{{ wallet.label }}</h1>
-
-    <div>
+    <div class="page-header">
         <div>
-            <h5 class="mb-0">Remboursements à effectuer</h5>
-            <h6>Date du dernier règlement : {{ wallet.lastSettlementDate | date('d/m/Y H:i:s') }}</h6>
+            <h1>{{ wallet.label }}</h1>
+            <p class="text-muted">
+                Dépenses totales :
+                <span class="total-highlight">
+                {{ (wallet.totalAmount / 100)|number_format(2, ',', ' ') }} €
+            </span>
+            </p>
         </div>
-        <div class="card-body">
-            {% if balances is empty %}
-                <div class="alert alert-success mb-0">
-                    <i class="fas fa-check-circle"></i> Tout est en ordre ! Personne ne doit rien.
+        <div class="header-actions">
+            <a href="{{ path('expenses_create', {"uid": wallet.uid}) }}" class="btn-primary">
+                <span>+</span> Ajouter une dépense
+            </a>
+            <a href="{{ path('wallets_add_user', {"uid": wallet.uid}) }}" class="btn-secondary">
+                <span>👤</span> Inviter
+            </a>
+        </div>
+    </div>
+    <div class="wallet-dashboard">
+        <div class="card balance-card">
+            <div class="card-header">
+                <div class="card-header-group">
+                    <h3>Remboursements à effectuer</h3>
+                    <span class="card-subtitle">
+            Dernier règlement :
+            <strong>{{ wallet.lastSettlementDate ? wallet.lastSettlementDate | date('d/m/Y') : 'Aucun' }}</strong>
+        </span>
                 </div>
-            {% else %}
-                <ul class="list-group list-group-flush">
-                    {% for debtor, creditors in balances %}
-                        {% for creditor, amount in creditors %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>
-                                <strong class="text-danger">{{ debtor }}</strong>
-                                doit à
-                                <strong class="text-success">{{ creditor }}</strong>
-                            </span>
-                                <span class="badge bg-primary rounded-pill fs-6">
-                                {{ (amount / 100)|number_format(2, ',', ' ') }} €
-                            </span>
-                            </li>
+
+                {% if balances is not empty %}
+                    <a href="{{ path('wallets_settle', {'uid': wallet.uid}) }}" class="btn-settle">
+                        Tout régler
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+                {% if balances is empty %}
+                    <div class="alert-empty">
+                        ✅ Tout est en ordre ! Personne ne doit rien.
+                    </div>
+                {% else %}
+                    <ul class="balance-list">
+                        {% for debtor, creditors in balances %}
+                            {% for creditor, amount in creditors %}
+                                <li class="balance-item">
+                                    <div class="balance-path">
+                                        <span class="name-pill debtor-pill">{{ debtor }}</span>
+                                        <span class="arrow-icon">→</span>
+                                        <span class="name-pill creditor-pill">{{ creditor }}</span>
+                                    </div>
+                                    <span class="badge-amount">
+                                    {{ (amount / 100)|number_format(2, ',', ' ') }} €
+                                </span>
+                                </li>
+                            {% endfor %}
                         {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Historique des dépenses</h2>
+            </div>
+            <table class="modern-table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Auteur</th>
+                    <th>Libellé</th>
+                    <th>Montant</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for expense in expenses %}
+                    <tr>
+                        <td class="col-date">{{ expense.createdDate | date('d/m/Y') }}</td>
+                        <td><span class="user-pill">{{ expense.createdBy.name }}</span></td>
+                        <td class="col-label">{{ expense.description }}</td>
+                        <td class="col-amount">{{ (expense.amount / 100)|number_format(2, ',', ' ') }} €</td>
+                        <td>
+                            <a href="{{ path("expenses_delete", {"wallet_uid": wallet.uid, "expense_uid": expense.uid}) }}"
+                               class="btn-delete-table">
+                                Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% if maxPaginationPage > 1 %}
+                <div class="pagination">
+                    {% for i in 1..maxPaginationPage %}
+                        <a class="pagination-link {% if page == i %}active{% endif %}"
+                           href="{{ path("wallets_show", {"uid": wallet.uid}) }}?page={{ i }}&limit={{ limit }}">
+                            {{ i }}
+                        </a>
                     {% endfor %}
-                </ul>
+                </div>
             {% endif %}
         </div>
-    </div>
 
-    <div>
-        <a href="{{ path('wallets_settle', {'uid': wallet.uid}) }}">
-            Marquer comme réglé
-        </a>
-    </div>
-
-    <div>
-        <a href="{{ path('wallets_add_user', {"uid": wallet.uid}) }}">
-            + Ajouter un utilisateur
-        </a>
-    </div>
-
-    <div>
-        <a href="{{ path('expenses_create', {"uid": wallet.uid}) }}">
-            + Ajouter une dépense
-        </a>
-    </div>
-
-    <div>
-        <a href="{{ path('wallets_delete', {'uid': wallet.uid}) }}">
-            Supprimer le portefeuille
-        </a>
-    </div>
-
-    <h2>Montant total : {{ (wallet.totalAmount / 100)|number_format(2, ',', ' ') }} €</h2>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Qui</th>
-            <th scope="col">Libellé</th>
-            <th scope="col">Montant</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.createdDate | date('d/m/Y') }}</td>
-                <td>{{ expense.createdBy.name }}</td>
-                <td>{{ expense.description }}</td>
-                <td>{{ (expense.amount / 100)|number_format(2, ',', ' ') }} €</td>
-                <td><a href="{{ path("expenses_delete", {"wallet_uid": wallet.uid, "expense_uid": expense.uid}) }}">Supprimer
-                        la dépense</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div>
-        {% for i in 1..maxPaginationPage %}
-            <a class="{% if page == i %}active{% endif %}"
-               href="{{ path("wallets_show", {"uid": wallet.uid}) }}?page={{ i }}&limit={{ limit }}">
-                {{ i }}
+        <div class="danger-zone">
+            <a href="{{ path('wallets_delete', {'uid': wallet.uid}) }}" class="btn-danger-outline">
+                Supprimer le portefeuille
             </a>
-        {% endfor %}
+        </div>
     </div>
 {% endblock %}

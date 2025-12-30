@@ -1,13 +1,48 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Création de dépense - Bricount{% endblock %}
+{% block title %}Nouvelle dépense - Bricount{% endblock %}
 
 {% block content %}
-    <h1>Créer une nouvelle dépense</h1>
+    <div class="page-header">
+        <div>
+            <h1>Ajouter une dépense</h1>
+            <p class="text-muted">Enregistrez un nouvel achat pour le portefeuille <strong>{{ wallet.label }}</strong>
+            </p>
+        </div>
+        <a href="{{ path('wallets_show', {'uid': wallet.uid}) }}" class="btn-secondary">
+            ← Retour au portefeuille
+        </a>
+    </div>
 
-    {{ form_start(form) }}
-    {{ form_row(form.amount) }}
-    {{ form_row(form.description) }}
-    {{ form_end(form) }}
+    <div class="form-container">
+        <div class="form-card">
+            {{ form_start(form, {'attr': {'class': 'modern-form'}}) }}
 
+            <div class="form-group">
+                {{ form_label(form.amount, 'Montant de la dépense') }}
+                <div class="input-wrapper">
+                    {{ form_widget(form.amount, {'attr': {'placeholder': '0.00', 'class': 'input-large'}}) }}
+                    <span class="input-suffix">€</span>
+                </div>
+                {{ form_errors(form.amount) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.description, 'Libellé / Description') }}
+                {{ form_widget(form.description, {'attr': {'placeholder': 'Ex: Courses , Essence, Restaurant...', 'class': 'input-large'}}) }}
+                <div class="form-help">
+                    {{ form_help(form.description) }}
+                </div>
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary btn-full">
+                    Enregistrer la dépense
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

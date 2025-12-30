@@ -1,0 +1,321 @@
+/* assets/styles/wallet_show.css */
+
+/* --- 1. MISE EN PAGE GLOBALE (Full Width) --- */
+.wallet-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    width: 100%;
+}
+
+/* --- 2. EN-TÊTE DE PAGE --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.total-highlight {
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.8rem;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* --- 3. BOUTONS D'ACTION DU HEADER --- */
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: var(--primary) !important;
+    border: 2px solid var(--primary);
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-main);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+/* --- 4. SECTIONS (Balances & Tableau) --- */
+
+/* --- SECTION REMBOURSEMENTS (Card) --- */
+.balance-card {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+/* Header : Titre à gauche, Bouton à droite */
+.card-header {
+    padding: 1.2rem 2rem;
+    background: #fcfcfd;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style pour le groupe de titres dans le header de la carte */
+.card-header-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.card-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Bouton "Tout régler" (Style Primary Small) */
+.btn-settle {
+    background-color: var(--primary);
+    color: white !important;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-settle:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+}
+
+/* Liste des dettes */
+.balance-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.balance-item {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s;
+}
+
+.balance-item:hover {
+    background-color: #fafbff; /* Effet de survol discret */
+}
+
+/* Parcours de la dette (A → B) */
+.balance-path {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.name-pill {
+    padding: 0.4rem 1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Couleurs spécifiques pour qui doit et qui reçoit */
+.debtor-pill {
+    background-color: #fee2e2; /* Rouge clair */
+    color: #991b1b; /* Rouge foncé */
+}
+
+.creditor-pill {
+    background-color: #d1fae5; /* Vert clair */
+    color: #065f46; /* Vert foncé */
+}
+
+.arrow-icon {
+    color: var(--text-muted);
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+/* Badge du montant à droite */
+.badge-amount {
+    background: #f0f3ff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+/* État vide : Tout est en ordre */
+.alert-empty {
+    padding: 5rem 2rem;
+    text-align: center;
+    color: #059669;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+/* Footer de la carte (Date de dernier règlement) */
+.card-footer-info {
+    padding: 1rem 2rem;
+    background: #fcfcfd;
+    border-top: 1px solid var(--border);
+    text-align: left;
+}
+
+.balance-card, .table-container {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.card-header, .table-header {
+    padding: 1.5rem 2rem;
+    background: #fcfcfd;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-header h3, .table-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* --- 5. TABLEAU (Pleine largeur, centré) --- */
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.modern-table th, .modern-table td {
+    padding: 1.2rem;
+    text-align: center;
+    border-bottom: 1px solid #f8fafc;
+    word-wrap: break-word;
+}
+
+.modern-table th {
+    background: #fcfcfd;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.user-pill {
+    background: #f1f5f9;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Bouton supprimer spécifique à chaque ligne du tableau */
+.btn-delete-table {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--danger);
+    color: white !important;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-delete-table:hover {
+    background-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
+}
+
+/* --- 6. PAGINATION --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 3rem 0;
+}
+
+.pagination-link {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    text-decoration: none;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.pagination-link:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: var(--bg-main);
+    transform: translateY(-2px);
+}
+
+.pagination-link.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* --- 7. ZONE DE DANGER (Bouton Supprimer Portefeuille) --- */
+.danger-zone {
+    margin-top: 2rem;
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+.btn-danger-outline {
+    display: inline-block;
+    padding: 0.8rem 2.5rem;
+    background-color: white; /* Fond blanc */
+    color: var(--danger); /* Texte rouge */
+    border: 2px solid var(--danger); /* Bordure rouge */
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-danger-outline:hover {
+    background-color: var(--danger);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}

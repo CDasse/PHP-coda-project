@@ -26,10 +26,11 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
                 'required' => true,
+                'label' => "Adresse email",
             ])
             ->add('name', TextType::class, [
                 'mapped' => false,
-                'label' => "Nom d'utilisateur",
+                'label' => "Votre nom ou pseudo",
                 'required' => true,
                 'help' => "Le nom d'utilisateur doit contenir entre 3 et 30 caractères.",
                 'constraints' => [

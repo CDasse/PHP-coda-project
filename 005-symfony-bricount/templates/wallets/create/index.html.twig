@@ -1,12 +1,48 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Création de portefeuille - Bricount{% endblock %}
+{% block title %}Nouveau portefeuille - Bricount{% endblock %}
 
 {% block content %}
-    <h1>Créer un nouveau portefeuille</h1>
+    <div class="page-header">
+        <div>
+            <h1>Créer un nouveau portefeuille</h1>
+            <p class="text-muted">Donnez un nom à votre groupe pour commencer à suivre vos dépenses communes.</p>
+        </div>
+        <a href="{{ path('wallets_list') }}" class="btn-secondary">
+            ← Retour
+        </a>
+    </div>
 
-    {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_end(form) }}
+    <div class="form-container">
+        <div class="form-card">
+            {{ form_start(form, {'attr': {'class': 'modern-form'}}) }}
 
+            <div class="form-group">
+                {{ form_label(form.name, 'Nom du portefeuille') }}
+
+                {{ form_widget(form.name, {
+                    'attr': {
+                        'placeholder': 'Ex: Vacances en Espagne, Coloc 2025, Cadeau commun...',
+                        'class': 'input-large'
+                    }
+                }) }}
+
+                <div class="form-help">
+                    {{ form_help(form.name) }}
+                </div>
+
+                <div class="form-error">
+                    {{ form_errors(form.name) }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary btn-full">
+                    Créer le portefeuille
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

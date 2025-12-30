@@ -5,7 +5,6 @@ namespace App\Form;
 use App\DTO\XUserWalletDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -18,7 +17,7 @@ class XUserWalletType extends AbstractType
         $userChoices = [];
 
         foreach ($options['available_users'] as $user) {
-            $userChoices[$user->getName() . "(" . $user->getEmail() . ")"] = $user->getId();
+            $userChoices[$user->getName() . " (" . $user->getEmail() . ")"] = $user->getId();
         }
 
         $builder
@@ -44,9 +43,6 @@ class XUserWalletType extends AbstractType
                         message: "Vous devez saisir un rôle pour l'utilisateur"
                     )
                 ]
-            ])
-            ->add("submit", SubmitType::class, [
-                'label' => 'Enregistrer',
             ]);
     }
 

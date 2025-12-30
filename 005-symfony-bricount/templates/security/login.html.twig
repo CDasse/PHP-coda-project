@@ -1,41 +1,75 @@
 {% extends '_layouts/standard.html.twig' %}
 
-{% block title %}Connection - Bricount{% endblock %}
+{% block title %}Connexion - Bricount{% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% if error %}
-            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+    <div class="home-wrapper">
+        <main class="hero-section">
 
-        {% if app.user %}
-            <div>
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+            <div class="hero-left">
+                <h1 class="brand-name">Bricount</h1>
             </div>
-        {% endif %}
 
-        <h1>Connection</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username"
-               autocomplete="email" required autofocus>
-        <label for="password">Mot de passe</label>
-        <input type="password" name="_password" id="password" autocomplete="current-password"
-               required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-               value="{{ csrf_token('authenticate') }}">
+            <div class="hero-right">
+                <div class="auth-card">
+                    <h2 class="auth-title">Bon retour !</h2>
+                    <p class="auth-subtitle">Connectez-vous pour accéder à vos portefeuilles.</p>
 
-        {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
+                    <form method="post" class="auth-form">
 
-        <div class="checkbox mb-3">
-            <input type="checkbox" name="_remember_me" id="_remember_me">
-            <label for="_remember_me">Remember me</label>
-        </div>
-        #}
+                        {% if error %}
+                            <div class="form-error-global">
+                                <ul>
+                                    <li>{{ error.messageKey|trans(error.messageData, 'security') }}</li>
+                                </ul>
+                            </div>
+                        {% endif %}
 
-        <button type="submit">
-            Se connecter
-        </button>
-    </form>
+                        {% if app.user %}
+                            <div class="form-help" style="margin-bottom: 2rem;">
+                                Vous êtes déjà connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>.
+                                <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                            </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label for="username">Adresse email</label>
+                            <input type="email"
+                                   value="{{ last_username }}"
+                                   name="_username"
+                                   id="username"
+                                   class="input-field"
+                                   placeholder="nom@exemple.com"
+                                   autocomplete="email"
+                                   required
+                                   autofocus>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Mot de passe</label>
+                            <input type="password"
+                                   name="_password"
+                                   id="password"
+                                   class="input-field"
+                                   placeholder="••••••••"
+                                   autocomplete="current-password"
+                                   required>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <button type="submit" class="btn-primary">
+                            Se connecter
+                        </button>
+
+                        <p class="auth-footer">
+                            Pas encore de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous ici</a>
+                        </p>
+
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
 {% endblock %}

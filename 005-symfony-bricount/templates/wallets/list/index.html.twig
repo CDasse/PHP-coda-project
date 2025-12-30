@@ -1,33 +1,38 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Liste des portefeuilles - Bricount{% endblock %}
+{% block title %}Mes Portefeuilles - Bricount{% endblock %}
 
 {% block content %}
-    <h1>Liste des portefeuilles</h1>
-
-    <div>
-        <a href="{{ path('wallets_create') }}">
-            Créer un portefeuille
-        </a>
+    <div class="page-header">
+        <h1>Liste des portefeuilles</h1>
+        <div>
+            <a href="{{ path('wallets_create') }}" class="btn btn-primary">
+                <span class="icon">+</span> Créer un portefeuille
+            </a>
+        </div>
     </div>
 
-
-
-    <ul>
+    <div class="wallet-grid">
         {% for wallet in wallets %}
-            <li>
-                <a href="{{ path('wallets_show', {'uid': wallet.uid}) }}">{{ wallet.label }}
-                    - {{ (wallet.totalAmount / 100)|number_format(2, ',', ' ') }} €</a>
-            </li>
+            <div class="wallet-card">
+                <a href="{{ path('wallets_show', {'uid': wallet.uid}) }}" class="wallet-link">
+                    <div class="wallet-info">
+                        <h2 class="wallet-label">{{ wallet.label }}</h2>
+                        <p class="wallet-amount">
+                            {{ (wallet.totalAmount / 100)|number_format(2, ',', ' ') }} €
+                        </p>
+                    </div>
+                </a>
 
-            <div>
-                <a href="{{ path('wallets_edit', {'uid': wallet.uid}) }}">
-                    Modifier le portefeuille
-                </a>
-                <a href="{{ path('wallets_delete', {'uid': wallet.uid}) }}">
-                    Supprimer le portefeuille
-                </a>
+                <div class="wallet-actions">
+                    <a href="{{ path('wallets_edit', {'uid': wallet.uid}) }}" class="btn-icon">
+                        ✏️ Modifier
+                    </a>
+                    <a href="{{ path('wallets_delete', {'uid': wallet.uid}) }}" class="btn-icon btn-danger">
+                        🗑️ Supprimer
+                    </a>
+                </div>
             </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}

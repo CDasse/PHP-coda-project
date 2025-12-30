@@ -1,12 +1,47 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Modification du portefeuille {{ wallet.label }} - Bricount{% endblock %}
+{% block title %}Modifier {{ wallet.label }} - Bricount{% endblock %}
 
 {% block content %}
-    <h1>Modifier le portefeuille {{ wallet.label }}</h1>
+    <div class="page-header">
+        <div>
+            <h1>Modifier le portefeuille</h1>
+            <p class="text-muted">Mise à jour des informations pour <strong>{{ wallet.label }}</strong></p>
+        </div>
+        <div class="header-actions">
+            <a href="{{ path('wallets_show', {'uid': wallet.uid}) }}" class="btn-secondary">
+                ← Retour au portefeuille
+            </a>
+        </div>
+    </div>
 
-    {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_end(form) }}
+    <div class="form-container">
+        <div class="form-card">
+            {{ form_start(form, {'attr': {'class': 'modern-form'}}) }}
 
+            <div class="form-group">
+                {{ form_label(form.name, 'Nom du portefeuille') }}
+
+                {{ form_widget(form.name, {
+                    'attr': {
+                        'class': 'input-large'
+                    }
+                }) }}
+
+                {{ form_help(form.name) }}
+
+                <div class="form-error">
+                    {{ form_errors(form.name) }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary btn-full">
+                    Enregistrer les modifications
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

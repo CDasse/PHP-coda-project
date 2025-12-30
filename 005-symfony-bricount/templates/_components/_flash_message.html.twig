@@ -1,8 +1,18 @@
 {# messages flashes #}
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div class="alert alert-{{ label }}" role="alert">
-            {{ message|raw }}
-        </div>
+<div class="flash-container">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            {% set alertClass = (label == 'error') ? 'danger' : label %}
+
+            <div class="alert alert-{{ alertClass }}" role="alert">
+                {% if alertClass == 'success' %} ✅
+                {% elseif alertClass == 'danger' %} ⚠️
+                {% else %}  {% endif %}
+
+                {{ message|raw }}
+            </div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+</div>
+
+

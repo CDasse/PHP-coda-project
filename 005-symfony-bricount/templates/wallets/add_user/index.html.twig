@@ -1,12 +1,43 @@
 {% extends '_layouts/in_app.html.twig' %}
 
-{% block title %}Ajout d'un utilisateur - Portefeuille {{ wallet.label }} - Bricount{% endblock %}
+{% block title %}Inviter un ami - {{ wallet.label }} - Bricount{% endblock %}
 
 {% block content %}
-    <h1>Ajout d'un utilisateur - Portefeuille {{ wallet.label }}</h1>
+    <div class="page-header">
+        <div>
+            <h1>Inviter un utilisateur</h1>
+            <p class="text-muted">Partagez les dépenses de <strong>{{ wallet.label }}</strong> avec un proche</p>
+        </div>
+        <a href="{{ path('wallets_show', {'uid': wallet.uid}) }}" class="btn-secondary">
+            ← Retour au portefeuille
+        </a>
+    </div>
 
-    {{ form_start(form) }}
-    {{ form_row(form.userId) }}
-    {{ form_row((form.role)) }}
-    {{ form_end(form) }}
+    <div class="form-container">
+        <div class="form-card">
+            {{ form_start(form, {'attr': {'class': 'modern-form'}}) }}
+
+            <div class="form-group">
+                {{ form_label(form.userId, 'Choisir un utilisateur') }}
+                {{ form_widget(form.userId, {'attr': {'class': 'input-large select-custom'}}) }}
+                <div class="form-error">{{ form_errors(form.userId) }}</div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.role, 'Quel rôle lui attribuer ?') }}
+                <div class="role-selector">
+                    {{ form_widget(form.role) }}
+                </div>
+                <div class="form-error">{{ form_errors(form.role) }}</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary btn-full">
+                    Ajouter au groupe
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

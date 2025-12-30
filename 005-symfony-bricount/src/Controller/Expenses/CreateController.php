@@ -51,6 +51,7 @@ final class CreateController extends AbstractController
 
         return $this->render('expenses/create/index.html.twig', [
             'form' => $form,
+            'wallet' => $wallet,
         ]);
     }
 }
