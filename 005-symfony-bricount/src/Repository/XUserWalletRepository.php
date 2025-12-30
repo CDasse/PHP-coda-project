@@ -32,4 +32,21 @@ class XUserWalletRepository extends ServiceEntityRepository
                 ->getOneOrNullResult();
     }
 
+    public function findActiveMembers(Wallet $wallet): array
+    {
+        $results = $this
+            ->createQueryBuilder('xuw')
+            ->innerJoin('xuw.targetUser', 'u')
+            ->addSelect('u')
+            ->where('xuw.wallet = :wallet')
+            ->andWhere('xuw.isDeleted = false')
+            ->setParameter('wallet', $wallet)
+            ->getQuery()
+            ->getResult();
+
+        return array_map(function ($xuw) {
+            return $xuw->getTargetUser();
+        }, $results);
+    }
+
 }

@@ -41,4 +41,8 @@ class XUserWalletService
         return $xUserWallet;
     }
 
+    public function findActiveMembers(Wallet $wallet): array
+    {
+        return $this->xUserWalletRepository->findActiveMembers($wallet);
+    }
 }

@@ -43,19 +43,4 @@ class WalletRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getSingleScalarResult();
     }
-
-    public function calculateTotalBalanceSinceLastSettlement(Wallet $wallet): int
-    {
-        return
-            $this
-                ->createQueryBuilder('w')
-                ->select('COALESCE(SUM(e.amount), 0)')
-                ->leftJoin(Expense::class, 'e', 'WITH', 'w.id = e.wallet AND e.isDeleted = false')
-                ->andWhere('(w.lastSettlementDate IS NULL OR w.lastSettlementDate < e.createdDate)')
-                ->andWhere('w.isDeleted = false')
-                ->andWhere('w.id = :walletId')
-                ->setParameter('walletId', $wallet->getId())
-                ->getQuery()
-                ->getSingleScalarResult();
-    }
 }

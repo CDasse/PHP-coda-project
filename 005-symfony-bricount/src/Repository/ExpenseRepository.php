@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Expense;
 use App\Entity\Wallet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -50,6 +51,29 @@ class ExpenseRepository extends ServiceEntityRepository
                 ->setParameter('walletId', $wallet->getId())
                 ->getQuery()
                 ->getResult();
+    }
+
+    public function calculateTotalBalanceSinceLastSettlement(Wallet $wallet): int
+    {
+        $sql = <<<SQL
+        SELECT
+            COALESCE(SUM(e.amount), 0) as amount
+        FROM expense e
+        INNER JOIN wallet w ON e.wallet_id = w.id
+        WHERE e.is_deleted = false
+          AND w.id = :walletId
+          AND (w.last_settlement_date IS NULL OR e.created_date > w.last_settlement_date)
+        SQL;
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('amount', 'amount');
+
+        $result = $this->getEntityManager()
+            ->createNativeQuery($sql, $rsm)
+            ->setParameter('walletId', $wallet->getId())
+            ->getSingleScalarResult();
+
+        return (int)$result;
     }
 
 }

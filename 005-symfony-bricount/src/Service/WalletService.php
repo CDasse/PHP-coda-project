@@ -79,6 +79,7 @@ class WalletService
         return $this->userRepository->findAvailableUsersForWallet($wallet);
     }
 
+
     public function deleteWallet(Wallet $wallet, User $deletor): void
     {
         $wallet->setisDeleted(true);
@@ -109,25 +110,21 @@ class WalletService
 
     public function getUserBalances(Wallet $wallet): array
     {
-        $totalAmount = $this->walletRepository->calculateTotalBalanceSinceLastSettlement($wallet);
+        $totalAmount = $this->expenseRepository->calculateTotalBalanceSinceLastSettlement($wallet);
         $expenses = $this->expenseRepository->findExpensesSinceLastSettlement($wallet);
 
-        if (empty($expenses)) {
+        $allMembers = $this->xUserWalletRepository->findActiveMembers($wallet);
+        $userCount = count($allMembers);
+
+        if ($userCount === 0 || $totalAmount <= 0) {
             return [];
         }
 
-        $userMap = [];
-        foreach ($expenses as $expense) {
-            $user = $expense->getCreatedBy();
-            $userMap[$user->getName()] = $user;
-        }
-
-        $userCount = count($userMap);
         $fairShare = $totalAmount / $userCount;
 
         $balances = [];
-        foreach ($userMap as $name => $user) {
-            $balances[$name] = 0;
+        foreach ($allMembers as $user) {
+            $balances[$user->getName()] = 0;
         }
 
         foreach ($expenses as $expense) {
@@ -135,8 +132,8 @@ class WalletService
             $balances[$name] += $expense->getAmount();
         }
 
-        foreach ($balances as $name => $paidAmount) {
-            $balances[$name] = round($balances[$name] - $fairShare, 2);
+        foreach ($balances as $name => $amount) {
+            $balances[$name] = round(($balances[$name] - $fairShare), 2);
         }
 
         $creditors = [];
@@ -157,7 +154,6 @@ class WalletService
             $debtorName = array_key_first($debtors);
 
             $amount = min($creditors[$creditorName], $debtors[$debtorName]);
-
             $transfers[$debtorName][$creditorName] = $amount;
 
             $creditors[$creditorName] -= $amount;

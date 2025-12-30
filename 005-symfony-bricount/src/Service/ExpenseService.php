@@ -62,9 +62,4 @@ class ExpenseService
         $this->walletService->updateTotalBalance($expense->getWallet());
         $this->walletService->getUserBalances($expense->getWallet());
     }
-
-    public function findExpensesSinceLastSettlement(Wallet $wallet): array
-    {
-        return $this->expenseRepository->findExpensesSinceLastSettlement($wallet);
-    }
 }
