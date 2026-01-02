@@ -5,9 +5,35 @@
 {% endblock %}
 
 {% block body %}
-    <h1> Page non trouvée</h1>
-    <p>
-        Code d'erreur : {{ status_code }}
-    </p>
-    <p><a href="{{ path('home') }}">Retourner à la page d'accueil</a></p>
+    <div class="wallet-dashboard">
+        <div class="card balance-card" style="max-width: 600px; margin: 40px auto;">
+            <div class="card-header">
+                <div class="card-header-group">
+                    <h3>Oups ! Une erreur est survenue</h3>
+                </div>
+                <span class="name-pill debtor-pill">
+                    Code {{ status_code }}
+                </span>
+            </div>
+
+            <div class="card-body">
+                <div class="alert-empty" style="padding: 50px 20px;">
+                    <h2 style="margin-bottom: 20px;">
+                        Page introuvable
+                    </h2>
+
+                    <p style="color: #666; margin-bottom: 30px;">
+                        Il semble que le chemin que vous suivez n'est pas le bon.
+                    </p>
+
+                    <div class="actions">
+                        <a href="{{ path('home') }}" class="btn-settle"
+                           style="text-decoration: none; display: inline-block;">
+                            Retourner à l'accueil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -18,7 +18,6 @@
     animation: slideIn 0.3s ease-out;
 }
 
-/* Variantes de couleurs */
 .alert-success {
     background-color: #f0fdf4;
     color: #166534;
@@ -43,7 +42,6 @@
     border-color: #fef3c7;
 }
 
-/* Petite animation d'apparition */
 @keyframes slideIn {
     from {
         opacity: 0;

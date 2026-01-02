@@ -3,4 +3,25 @@
 {% block title %}Paramètres - Bricount{% endblock %}
 
 {% block content %}
+    <div class="wallet-dashboard">
+        <div class="card balance-card">
+            <div class="card-header">
+                <h3>Paramètres</h3>
+                <span class="card-subtitle">Gestion du compte</span>
+            </div>
+
+            <div class="card-body">
+                <div class="alert-empty" style="padding: 60px 0;">
+                    <h2 style="margin-bottom: 15px;">Version 2.0</h2>
+                    <p style="color: #666; margin-bottom: 30px;">
+                        Cette page est en cours de développement et sera disponible prochainement.
+                    </p>
+
+                    <a href="{{ path('wallets_list') }}" class="btn-settle">
+                        Retour à la liste des portefeuilles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
